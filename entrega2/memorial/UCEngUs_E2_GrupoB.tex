@@ -1,0 +1,608 @@
+% =====================================================================
+% Memorial de design da Entrega 2 -- Engenharia de Usabilidade (UnDF, 2/2026)
+% Compilar com: latexmk -pdf (pdfLaTeX) ou -xelatex. Fonte única: Times.
+% Todas as páginas em A4 retrato, sem páginas giradas.
+%
+% Base gerada a partir do roteiro da E2 (proposta de 27/10 + errata) e do
+% relatório da E1. Tudo em vermelho (\preencher) é conteúdo autoral do grupo:
+% esboços, fluxo, wireframe, telas, tokens, textos de interface, código e
+% decisões de design NÃO podem ser produzidos com IA generativa (seção 1.2).
+%
+% Figuras: coloque os arquivos em ./figuras/. As capturas do serviço real
+% ("antes") são lidas direto de ../../entrega1/relatorio/figuras/.
+% Enquanto o arquivo não existir, aparece uma moldura com o nome esperado.
+% =====================================================================
+\documentclass[
+  12pt,
+  oneside,
+  a4paper,
+  chapter=TITLE,
+  section=TITLE,
+  english,
+  brazilian
+]{abntex2}
+
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{mathptmx}
+  % Uma única família em todo o documento: Times também no lugar de
+  % Helvetica (sf) e Courier (tt).
+  \renewcommand{\sfdefault}{ptm}
+  \renewcommand{\ttdefault}{ptm}
+\else
+  \usepackage{fontspec}
+  \IfFontExistsTF{Times New Roman}{%
+    \setmainfont{Times New Roman}\setsansfont{Times New Roman}\setmonofont{Times New Roman}}{%
+    \IfFontExistsTF{Liberation Serif}{%
+      \setmainfont{Liberation Serif}\setsansfont{Liberation Serif}\setmonofont{Liberation Serif}}{%
+      \setmainfont{TeX Gyre Termes}\setsansfont{TeX Gyre Termes}\setmonofont{TeX Gyre Termes}}}
+\fi
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{placeins}
+\usepackage{microtype}
+\usepackage[alf]{abntex2cite}
+\usepackage{url}
+\urlstyle{same}
+\Urlmuskip=0mu plus 1mu
+% NBR 6023:2018: endereço eletrônico sem os sinais < >
+\def\UrlLeft{}\def\UrlRight{}
+
+\renewcommand{\arraystretch}{1.15}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\setlength{\emergencystretch}{3em}
+\raggedbottom
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.9}
+\renewcommand{\textfraction}{0.08}
+\renewcommand{\floatpagefraction}{0.75}
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{3}
+\setcounter{totalnumber}{6}
+\makeatletter
+\setlength{\@fptop}{0pt}
+\makeatother
+\AtBeginDocument{%
+  \renewcommand{\fonte}[1]{\par\vspace{3pt}{\footnotesize\raggedright\noindent Fonte: #1\par}\vspace{4pt}}%
+  \renewcommand{\nota}[1]{\par\vspace{2pt}{\footnotesize\raggedright\noindent Nota: #1\par}\vspace{4pt}}%
+}
+
+% Quadro como flutuante próprio (mesmo padrão de lista de quadros)
+\newcommand{\quadroname}{Quadro}
+\newcommand{\listofquadrosname}{Lista de quadros}
+\newfloat[chapter]{quadro}{loq}{\quadroname}
+\newlistof{listofquadros}{loq}{\listofquadrosname}
+\newlistentry{quadro}{loq}{0}
+\setfloatadjustment{quadro}{\centering}
+\counterwithout{quadro}{chapter}
+\renewcommand{\cftquadroname}{\quadroname\space}
+\renewcommand*{\cftquadroaftersnum}{\hfill\textendash\hfill}
+
+\newcommand{\preencher}[1]{\textcolor{red}{[#1]}}
+
+% ---------------------------------------------------------------------
+% Código da tela principal (seções 5 e 6 do roteiro).
+% A errata tornou o código OPCIONAL. Se o grupo não entregar o .zip,
+% troque para \codigofalse: somem os capítulos de validação e auditoria.
+% ---------------------------------------------------------------------
+\newif\ifcodigo
+\codigotrue
+
+% Imagem com fallback: procura em ./figuras/, depois nas figuras da E1;
+% se não achar, desenha uma moldura com o nome do arquivo esperado.
+% \img{opções do includegraphics}{arquivo.ext}
+\newcommand{\efig}{../../entrega1/relatorio/figuras}
+\newcommand{\img}[2]{%
+  \IfFileExists{figuras/#2}{\includegraphics[#1]{figuras/#2}}{%
+    \IfFileExists{\efig/#2}{\includegraphics[#1]{\efig/#2}}{%
+      \fbox{\parbox[c][3.5cm][c]{0.9\linewidth}{\centering
+        \preencher{inserir figuras/\detokenize{#2}}}}}}}
+
+% Figura: \fig[largura]{rótulo}{arquivo}{legenda}{fonte}
+\newcommand{\fig}[5][0.95]{%
+  \begin{figure}[!htbp]
+    \centering
+    \caption{#4}\label{fig:#2}
+    \img{width=#1\textwidth,height=0.42\textheight,keepaspectratio}{#3}
+    \fonte{#5}
+  \end{figure}\FloatBarrier}
+\newcommand{\capt}[1]{Secretaria de Economia do DF (#1), acesso em 18 out. 2026}
+\newcommand{\autores}{Elaborado pelos autores (2026).}
+
+% Antes e depois lado a lado, dentro do quadro de decisão.
+% \antesdepois{captura E1}{legenda antes}{tela do protótipo}{legenda depois}
+\newcommand{\antesdepois}[4]{%
+  \noindent
+  \begin{minipage}[b]{0.48\textwidth}\centering
+    \img{width=\linewidth,height=6.5cm,keepaspectratio}{#1}\par
+    {\footnotesize Antes: #2}
+  \end{minipage}\hfill
+  \begin{minipage}[b]{0.48\textwidth}\centering
+    \img{width=\linewidth,height=6.5cm,keepaspectratio}{#3}\par
+    {\footnotesize Depois: #4}
+  \end{minipage}\par\vspace{6pt}}
+
+% Corpo QOC do quadro de decisão (campos do roteiro, seção 7).
+% \qoc{questão}{opção adotada}{alternativa descartada}{requisito}{origem}{motivo}
+\newcommand{\qoc}[6]{%
+  \begin{tabularx}{\textwidth}{|P{3.6cm}|Y|}\hline
+    Questão (Q)                 & #1 \\\hline
+    Opção adotada (O)           & #2 \\\hline
+    Alternativa descartada (O)  & #3 \\\hline
+    Requisito (C)               & #4 \\\hline
+    Origem (C)                  & #5 \\\hline
+    Motivo                      & #6 \\\hline
+  \end{tabularx}}
+
+% ---------------------------------------------------------------------
+% Dados do trabalho
+% ---------------------------------------------------------------------
+\titulo{Solicitação de emissão da guia de ITBI no portal da Secretaria de Economia do DF: memorial de design}
+\autor{%
+  Ícaro Marra Souza\\
+  Karoline Rodrigues Costa\\
+  Leonardo Brito Gomes\\
+  Luiz Gustavo Silva Carvalho}
+\local{Brasília}
+\data{nov. 2026}
+\instituicao{%
+  Universidade do Distrito Federal -- UnDF
+  \par
+  Unidade Curricular de Engenharia de Usabilidade}
+\tipotrabalho{Memorial de design}
+\preambulo{Memorial de design referente à entrega 2 do projeto da Unidade
+Curricular de Engenharia de Usabilidade, apresentado à Universidade do Distrito
+Federal como requisito de avaliação, sob orientação da Profa. Dr. Carolina
+Gonçalves Abreu.}
+
+\definecolor{blue}{RGB}{41,5,195}
+\makeatletter
+\hypersetup{
+  pdftitle={\@title},
+  pdfauthor={\@author},
+  pdfsubject={UCEngUs -- Entrega 2},
+  pdfcreator={LaTeX com abnTeX2},
+  pdfkeywords={usabilidade}{acessibilidade}{protótipo}{design de interface},
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  filecolor=magenta,
+  urlcolor=blue,
+  bookmarksdepth=4}
+\makeatother
+
+\renewcommand{\imprimircapa}{%
+  \begin{capa}%
+    \center
+    \IfFileExists{../../assets/marca/undf-vertical.pdf}{%
+      \includegraphics[width=4.5cm]{../../assets/marca/undf-vertical.pdf}\par}{%
+      \IfFileExists{undf-vertical.pdf}{\includegraphics[width=4.5cm]{undf-vertical.pdf}\par}{%
+        \textcolor{red}{[marca UnDF vertical, mínimo 4 cm]}\par}}
+    \vspace*{1cm}
+    \ABNTEXchapterfont\large\imprimirautor
+
+    \vfill
+    \begin{center}
+    \ABNTEXchapterfont\bfseries\LARGE\imprimirtitulo
+    \end{center}
+    \vfill
+
+    \large\imprimirlocal
+
+    \large\imprimirdata
+
+    \vspace*{1cm}
+  \end{capa}}
+
+\setlength{\parindent}{1.25cm}
+\setlength{\parskip}{0.2cm}
+
+\makeindex
+
+% =====================================================================
+\begin{document}
+\selectlanguage{brazil}
+\frenchspacing
+
+\pretextual
+
+\imprimircapa
+\imprimirfolhaderosto
+
+\begin{resumo}
+\preencher{Resumo do memorial: o que foi redesenhado (fluxo crítico da E1, do
+início ao término), quantas telas, ferramenta do protótipo, conjunto de tokens
+adotado, se houve código e auditoria, e as cinco decisões em uma frase cada.}
+
+Palavras-chave: usabilidade, acessibilidade, protótipo, design de interface,
+serviço público digital.
+\end{resumo}
+
+\listoffigures*
+\cleardoublepage
+\listofquadros*
+\cleardoublepage
+\listoftables*
+\cleardoublepage
+
+\begin{siglas}
+  \item[DSGov]  Design System do Governo Federal
+  \item[HTA]    \textit{Hierarchical Task Analysis} (Análise Hierárquica de Tarefas)
+  \item[ITBI]   Imposto sobre a Transmissão de Bens Imóveis \textit{inter vivos}
+  \item[NVDA]   \textit{NonVisual Desktop Access}
+  \item[QOC]    \textit{Questions, Options and Criteria} (Questões, opções e critérios)
+  \item[RA]     Requisito de acessibilidade
+  \item[RU]     Requisito de usabilidade
+  \item[SEEC]   Secretaria de Estado de Economia do Distrito Federal
+  \item[UnDF]   Universidade do Distrito Federal
+  \item[WCAG]   \textit{Web Content Accessibility Guidelines}
+\end{siglas}
+
+\tableofcontents*
+\cleardoublepage
+
+\textual
+
+% =====================================================================
+\chapter{Introdução}\label{cap:introducao}
+% =====================================================================
+
+Este memorial documenta a definição da interface do fluxo crítico delimitado na
+Entrega 1 (E1). Toda decisão de interface aponta para um requisito da E1 (RU01 a
+RU08 e RA01 a RA12) e para o achado (A1 a A12) ou a sessão (S1 a S5) de onde
+veio.
+
+\begin{quadro}[!htbp]
+  \caption{Escopo herdado da Entrega 1}\label{qua:escopo}
+  \centering\small
+  \begin{tabularx}{\textwidth}{|P{3.4cm}|Y|}\hline
+    Fluxo crítico & Encontrar e abrir, a partir da página inicial da Secretaria de Economia do DF, o formulário de Atendimento Virtual para solicitar a emissão da guia de ITBI (E1, capítulo 4). \\\hline
+    Início & \preencher{início do fluxo redesenhado; na E1: página inicial \texttt{economia.df.gov.br}, sem login} \\\hline
+    Término & \preencher{término observável no protótipo; na E1: formulário exibido com Assunto = ITBI} \\\hline
+    Etapas da HTA & 1 Acessar o site da Secretaria (1.1, 1.2, 1.3); 2 Acessar o Atendimento Virtual (2.1, variante 2.1'); 3 Selecionar o serviço ITBI (3.1) (E1, Figura 6 e Quadro 12). \\\hline
+    Classes de contexto & C1 familiarizado com a web; C2 eventual com baixo letramento digital; C3 acesso ou percepção restrita (E1, Quadro 18). \\\hline
+    Personas & 1 Antônio; 2 Júlia; 3 Camila; 4 Rosimeire; 5 Valdir; 6 Edilene; 7 Rafael (E1, capítulo 5). \\\hline
+  \end{tabularx}
+  \fonte{\autores}
+\end{quadro}
+
+\begin{quadro}[!htbp]
+  \caption{Acesso ao protótipo}\label{qua:prototipo}
+  \centering\small
+  \begin{tabularx}{\textwidth}{|P{3.4cm}|Y|}\hline
+    Ferramenta & Figma \\\hline
+    Link de apresentação & \preencher{link do modo de apresentação; compartilhamento ``qualquer pessoa com o link pode ver''} \\\hline
+    Quadro inicial & \preencher{Tela 01 -- nome} \\\hline
+    Testado em janela anônima & \preencher{data e integrante que testou, sem conta e sem instalação} \\\hline
+    Telas em PDF & \texttt{UCEngUs\_\allowbreak telas\_\allowbreak GrupoB.pdf}, uma tela por página, com a numeração do capítulo~\ref{cap:navegacao}. \\\hline
+    \ifcodigo Código da tela principal & \texttt{UCEngUs\_\allowbreak codigo\_\allowbreak GrupoB.zip}; abrir \preencher{index.html} no navegador, sem compilação e sem servidor. \\\hline\fi
+  \end{tabularx}
+  \fonte{\autores}
+\end{quadro}\FloatBarrier
+
+% =====================================================================
+\chapter{Esboços da tela principal}\label{cap:esbocos}
+% =====================================================================
+
+\preencher{Qual é a tela principal (a que tem ao menos um campo de entrada ou a
+escolha central do fluxo) e por que é ela. Mesma tela do wireframe e, se houver,
+do código.}
+
+\fig[0.8]{esboco-a}{esboco_alternativa_a.png}{Esboço da alternativa A da tela principal (adotada)}{\autores}
+\fig[0.8]{esboco-b}{esboco_alternativa_b.png}{Esboço da alternativa B da tela principal (descartada)}{\autores}
+
+\begin{quadro}[!htbp]
+  \caption{Alternativas da tela principal}\label{qua:alternativas}
+  \centering\small
+  \begin{tabularx}{\textwidth}{|P{3.0cm}|Y|Y|}\hline
+    & Alternativa A (adotada) & Alternativa B (descartada) \\\hline
+    Ideia central & \preencher{} & \preencher{} \\\hline
+    Autor do esboço & \preencher{} & \preencher{} \\\hline
+    Diferença principal & \multicolumn{2}{l|}{\preencher{o que torna as duas bem diferentes}} \\\hline
+  \end{tabularx}
+  \fonte{\autores}
+  \nota{A justificativa da escolha está na decisão D1 (capítulo~\ref{cap:decisoes}); as fotos das folhas de todos os integrantes estão no Anexo~\ref{an:esbocos}.}
+\end{quadro}\FloatBarrier
+
+% =====================================================================
+\chapter{Fluxo de navegação}\label{cap:navegacao}
+% =====================================================================
+
+\preencher{Uma frase sobre o caminho de sucesso e os caminhos alternativos e de
+erro. O diagrama ocupa uma página e mostra todas as telas numeradas e as
+transições.}
+
+\begin{figure}[!p]
+  \centering
+  \caption{Fluxo de navegação do protótipo}\label{fig:fluxo-nav}
+  \img{width=\textwidth,height=0.8\textheight,keepaspectratio}{fluxo_navegacao.png}
+  \fonte{\autores}
+\end{figure}
+
+\begin{quadro}[!htbp]
+  \caption{Telas do protótipo, etapa da HTA e estados}\label{qua:telas}
+  \centering\footnotesize
+  \begin{tabularx}{\textwidth}{|P{1.5cm}|Y|P{2.0cm}|P{4.4cm}|}\hline
+    Tela & Nome & Etapa da HTA & Tipo (sucesso, alternativo, erro, estado) \\\hline
+    Tela 01 & \preencher{} & \preencher{} & \preencher{} \\\hline
+    Tela 02 & \preencher{} & \preencher{} & \preencher{} \\\hline
+    Tela 03 & \preencher{} & \preencher{} & \preencher{} \\\hline
+    Tela 04 & \preencher{} & \preencher{} & \preencher{} \\\hline
+    Tela 05 & \preencher{} & \preencher{} & \preencher{} \\\hline
+  \end{tabularx}
+  \fonte{\autores}
+  \nota{A mesma numeração é usada no PDF das telas, nos quadros de decisão e na matriz.}
+\end{quadro}\FloatBarrier
+
+% =====================================================================
+\chapter{Wireframe da tela principal}\label{cap:wireframe}
+% =====================================================================
+
+\preencher{O que entra na tela e em que ordem, partindo da alternativa A. Sem cor,
+tipografia definitiva nem imagens.}
+
+\fig[0.55]{wireframe}{wireframe_tela_principal.png}{Wireframe da tela principal (Tela \preencher{nn}), largura de celular}{\autores}
+
+% =====================================================================
+\chapter{Design visual e protótipo}\label{cap:visual}
+% =====================================================================
+
+\section{Tokens e componentes}\label{sec:tokens}
+
+% O serviço é DISTRITAL (SEEC-DF): o uso do DSGov é opcional.
+% - Se o grupo NÃO adotar o DSGov: mantenha o Quadro "Tokens e componentes
+%   próprios" (nome, valor, função) e apague o quadro do padrão.
+% - Se adotar: siga a regra do serviço federal, mantenha o quadro do padrão
+%   (token ou componente, tela, função) e apague o quadro próprio. Desvios do
+%   padrão são justificados por requisito ou achado da E1.
+% Nomes pela função (cor-acao-principal), nunca pela aparência (azul-escuro).
+
+\preencher{Declarar se o grupo adotou o Padrão Digital de Governo
+\cite{dsgov} ou um conjunto próprio, e por quê.}
+
+\begin{quadro}[!htbp]
+  \caption{Tokens e componentes próprios}\label{qua:tokens}
+  \centering\footnotesize
+  \begin{tabularx}{\textwidth}{|P{4.0cm}|P{2.6cm}|Y|}\hline
+    Token ou componente & Valor & Função \\\hline
+    \multicolumn{3}{|l|}{\textit{Cor}} \\\hline
+    \preencher{texto principal} & \preencher{} & \preencher{} \\\hline
+    \preencher{texto secundário} & \preencher{} & \preencher{} \\\hline
+    \preencher{fundo} & \preencher{} & \preencher{} \\\hline
+    \preencher{ação} & \preencher{} & \preencher{} \\\hline
+    \preencher{erro} & \preencher{} & \preencher{} \\\hline
+    \multicolumn{3}{|l|}{\textit{Tipografia}} \\\hline
+    \preencher{título} & \preencher{} & \preencher{} \\\hline
+    \preencher{corpo} & \preencher{} & \preencher{} \\\hline
+    \preencher{apoio} & \preencher{} & \preencher{} \\\hline
+    \multicolumn{3}{|l|}{\textit{Espaçamento (escala)}} \\\hline
+    \preencher{} & \preencher{} & \preencher{} \\\hline
+    \multicolumn{3}{|l|}{\textit{Componentes}} \\\hline
+    \preencher{campo} & \preencher{} & \preencher{} \\\hline
+    \preencher{botão} & \preencher{} & \preencher{} \\\hline
+    \preencher{mensagem de erro} & \preencher{} & \preencher{} \\\hline
+    \preencher{indicador de etapa} & \preencher{} & \preencher{} \\\hline
+  \end{tabularx}
+  \fonte{\autores}
+  \nota{Os pares de cor de texto e de estado atendem 1.4.3 e 1.4.11 da WCAG 2.2 \cite{wcag22} (RA02, RA03): \preencher{razões medidas}.}
+\end{quadro}
+
+\begin{quadro}[!htbp]
+  \caption{Tokens e componentes do Padrão Digital de Governo usados no fluxo}\label{qua:tokens-dsgov}
+  \centering\footnotesize
+  \begin{tabularx}{\textwidth}{|P{4.4cm}|P{2.0cm}|Y|}\hline
+    Token ou componente do padrão & Tela & Função no fluxo \\\hline
+    \preencher{} & \preencher{} & \preencher{} \\\hline
+    \preencher{} & \preencher{} & \preencher{} \\\hline
+    \preencher{} & \preencher{} & \preencher{} \\\hline
+  \end{tabularx}
+  \fonte{\autores, com base em \citeonline{dsgov}.}
+\end{quadro}\FloatBarrier
+
+\section{Telas, larguras e estados}\label{sec:estados}
+
+Todas as telas estão na largura de celular; a tela principal também está na
+largura de computador. Os textos seguem a Política Nacional de Linguagem Simples
+\cite{linguagemsimples2025}.
+
+\fig[0.9]{principal-desktop}{tela_principal_desktop.png}{Tela principal (Tela \preencher{nn}) na largura de computador}{\autores}
+
+\begin{quadro}[!htbp]
+  \caption{Estados representados no protótipo}\label{qua:estados}
+  \centering\footnotesize
+  \begin{tabularx}{\textwidth}{|P{2.4cm}|P{4.2cm}|P{1.6cm}|Y|}\hline
+    Estado & Onde precisa aparecer & Tela & Situação representada \\\hline
+    Erro & Em cada caso de erro previsto no fluxo, com a mensagem & \preencher{} & \preencher{} \\\hline
+    Validação & Na tela principal: campo obrigatório vazio & \preencher{} & \preencher{} \\\hline
+    Validação & Na tela principal: formato inválido & \preencher{} & \preencher{} \\\hline
+    Carregando & Em toda etapa com processamento perceptível & \preencher{} & \preencher{} \\\hline
+    Vazio & Em toda tela que possa aparecer sem conteúdo & \preencher{} & \preencher{} \\\hline
+    Fora do ar & No envio ou na consulta feita a partir da tela principal & \preencher{} & \preencher{} \\\hline
+  \end{tabularx}
+  \fonte{\autores}
+\end{quadro}\FloatBarrier
+
+\ifcodigo
+% =====================================================================
+\chapter{Validação na tela em código}\label{cap:validacao}
+% =====================================================================
+
+\preencher{Campo validado em JavaScript, onde está no código (arquivo e função) e
+como a mensagem fica associada ao campo (por exemplo, \texttt{aria-describedby})
+com destaque além da cor.}
+
+\begin{quadro}[!htbp]
+  \caption{Validação do campo \preencher{nome do campo}}\label{qua:validacao}
+  \centering\small
+  \begin{tabularx}{\textwidth}{|P{3.0cm}|Y|}\hline
+    Gatilho  & \preencher{quando a validação dispara} \\\hline
+    Regra    & \preencher{o que é verificado} \\\hline
+    Feedback & \preencher{o que a pessoa vê e o leitor de tela anuncia} \\\hline
+    Laço     & \preencher{como a pessoa corrige e quando a mensagem some} \\\hline
+  \end{tabularx}
+  \fonte{\autores}
+\end{quadro}\FloatBarrier
+
+% =====================================================================
+\chapter{Auditoria automática de acessibilidade}\label{cap:auditoria}
+% =====================================================================
+
+Ferramenta: \preencher{WAVE, axe DevTools, Lighthouse ou outra, com versão}.
+Data da verificação: \preencher{dd/mm/2026}.
+
+\begin{table}[!htbp]
+  \caption{Ocorrências da auditoria automática}\label{tab:auditoria}
+  \centering\footnotesize
+  \begin{tabularx}{\textwidth}{|Y|P{3.0cm}|P{2.6cm}|Y|}\hline
+    Ocorrência & Critério WCAG & Elemento & Encaminhamento \\\hline
+    \preencher{descrição dada pela ferramenta} & \preencher{número e título} & \preencher{campo, botão ou trecho} & \preencher{corrigido nesta entrega; a corrigir até a E3; ou falso positivo, com justificativa} \\\hline
+  \end{tabularx}
+  \fonte{\autores, com \preencher{ferramenta}.}
+\end{table}\FloatBarrier
+\fi
+
+% =====================================================================
+\chapter{Decisões de design}\label{cap:decisoes}
+% =====================================================================
+
+Cada decisão segue o formato QOC \cite{maclean1991}: a questão de design, as
+opções consideradas e os critérios, que são o requisito da matriz e o achado ou
+a sessão da E1 de onde ele veio. D1 e D2 são obrigatórias: D1 é a escolha da
+alternativa da tela principal, e D2 atende às condições de acesso precário
+mapeadas na E1.
+
+% D1 -------------------------------------------------------------------
+\begin{quadro}[!htbp]
+  \caption{Decisão D1 --- alternativa adotada para a tela principal}\label{qua:d1}
+  \centering\small
+  \antesdepois{fig_form.png}{E1, Figura 5}{tela_principal.png}{Tela \preencher{nn}}
+  \qoc{\preencher{questão}}%
+      {Alternativa A: \preencher{}}%
+      {Alternativa B (segundo esboço): \preencher{}}%
+      {\preencher{ID da matriz}}%
+      {\preencher{achado A\# ou sessão S\#}}%
+      {\preencher{uma frase}}
+  \fonte{\autores}
+\end{quadro}\FloatBarrier
+
+% D2 -------------------------------------------------------------------
+% Acesso precário na E1: persona 6 (Edilene), classe C3, achado A12;
+% requisitos ligados: RU03, RA04 (refluxo) e RA07 (tamanho do alvo).
+\begin{quadro}[!htbp]
+  \caption{Decisão D2 --- condições de acesso precário}\label{qua:d2}
+  \centering\small
+  \antesdepois{captura_e1.png}{E1, Figura \preencher{n}}{tela_nn.png}{Tela \preencher{nn}}
+  \qoc{\preencher{questão}}%
+      {\preencher{}}%
+      {\preencher{}}%
+      {\preencher{ID da matriz}}%
+      {\preencher{achado A\# ou sessão S\#; persona 6}}%
+      {\preencher{uma frase}}
+  \fonte{\autores}
+\end{quadro}\FloatBarrier
+
+% D3 -------------------------------------------------------------------
+\begin{quadro}[!htbp]
+  \caption{Decisão D3 --- \preencher{tema}}\label{qua:d3}
+  \centering\small
+  \antesdepois{captura_e1.png}{E1, Figura \preencher{n}}{tela_nn.png}{Tela \preencher{nn}}
+  \qoc{\preencher{questão}}{\preencher{}}{\preencher{}}{\preencher{ID da matriz}}{\preencher{achado ou sessão}}{\preencher{uma frase}}
+  \fonte{\autores}
+\end{quadro}\FloatBarrier
+
+% D4 -------------------------------------------------------------------
+\begin{quadro}[!htbp]
+  \caption{Decisão D4 --- \preencher{tema}}\label{qua:d4}
+  \centering\small
+  \antesdepois{captura_e1.png}{E1, Figura \preencher{n}}{tela_nn.png}{Tela \preencher{nn}}
+  \qoc{\preencher{questão}}{\preencher{}}{\preencher{}}{\preencher{ID da matriz}}{\preencher{achado ou sessão}}{\preencher{uma frase}}
+  \fonte{\autores}
+\end{quadro}\FloatBarrier
+
+% D5 -------------------------------------------------------------------
+\begin{quadro}[!htbp]
+  \caption{Decisão D5 --- \preencher{tema}}\label{qua:d5}
+  \centering\small
+  \antesdepois{captura_e1.png}{E1, Figura \preencher{n}}{tela_nn.png}{Tela \preencher{nn}}
+  \qoc{\preencher{questão}}{\preencher{}}{\preencher{}}{\preencher{ID da matriz}}{\preencher{achado ou sessão}}{\preencher{uma frase}}
+  \fonte{\autores}
+\end{quadro}\FloatBarrier
+
+% Capturas "antes" disponíveis em entrega1/relatorio/figuras (número na E1):
+%   fig_home.png (Fig. 1)  fig_cat.png (2)  fig_serv.png (3)  fig_atv.png (4)
+%   fig_form.png (5)       a1_menu.png (7)  c_cabecalhos.png (8)
+%   a3_catalogo.png (9)    a4_contraste.png (10)  a5_faixa.png (11)
+%   c_itbi.png (12)        a7_busca.png (13)  a8_login.png (14)
+%   a9_form.png (15)       c_governo.png (16)
+
+% =====================================================================
+\chapter{Matriz de rastreabilidade}\label{cap:matriz}
+% =====================================================================
+
+A matriz foi entregue em arquivo separado,
+\texttt{UCEngUs\_\allowbreak matriz\_\allowbreak GrupoB.xlsx}, no Moodle, com
+as colunas ``Decisão de design'' e ``Situação na E2'' preenchidas para os vinte
+requisitos (RU01 a RU08 e RA01 a RA12).
+
+% =====================================================================
+\chapter{Declaração de contribuição individual}\label{cap:contribuicao}
+% =====================================================================
+
+\begin{quadro}[!htbp]
+  \caption{Contribuição individual}\label{qua:contribuicao}
+  \centering\small
+  \begin{tabularx}{\textwidth}{|P{3.4cm}|Y|}\hline
+    Integrante & Atividades realizadas \\\hline
+    Ícaro Marra Souza & \preencher{} \\\hline
+    Karoline Rodrigues Costa & \preencher{} \\\hline
+    Leonardo Brito Gomes & \preencher{} \\\hline
+    Luiz Gustavo Silva Carvalho & \preencher{} \\\hline
+  \end{tabularx}
+  \fonte{\autores}
+\end{quadro}
+
+% =====================================================================
+\chapter{Declaração de uso de inteligência artificial}\label{cap:ia}
+% =====================================================================
+
+Conforme a seção 1.2 do enunciado, esboços, fluxo de navegação, wireframe,
+protótipo, código e textos de interface foram produzidos pelos integrantes, sem
+uso de inteligência artificial generativa.
+
+\begin{quadro}[!htbp]
+  \caption{Uso de inteligência artificial}\label{qua:ia}
+  \centering\small
+  \begin{tabularx}{\textwidth}{|P{3.4cm}|Y|P{2.4cm}|}\hline
+    Ferramenta & Forma de uso & Etapa \\\hline
+    Claude (Anthropic) & Geração do modelo \LaTeX{} vazio deste memorial (estrutura de capítulos e quadros), com revisão dos autores. & Diagramação \\\hline
+    \preencher{} & \preencher{} & \preencher{} \\\hline
+  \end{tabularx}
+  \fonte{\autores}
+\end{quadro}
+
+\postextual
+
+\bibliography{referencias}
+
+\begin{anexosenv}
+\partanexos
+
+\chapter{Esboços dos integrantes}\label{an:esbocos}
+
+Fotos das folhas feitas em 27/10, em sala. \preencher{Se alguém faltou, indicar
+quem fez os esboços fora de sala e quando apresentou ao grupo.}
+
+\fig[0.7]{esboco-icaro}{esboco_icaro.jpg}{Esboços de Ícaro Marra Souza}{\autores}
+\fig[0.7]{esboco-karoline}{esboco_karoline.jpg}{Esboços de Karoline Rodrigues Costa}{\autores}
+\fig[0.7]{esboco-leonardo}{esboco_leonardo.jpg}{Esboços de Leonardo Brito Gomes}{\autores}
+\fig[0.7]{esboco-luiz}{esboco_luiz.jpg}{Esboços de Luiz Gustavo Silva Carvalho}{\autores}
+
+\end{anexosenv}
+
+\end{document}

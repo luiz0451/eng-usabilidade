@@ -1,0 +1,222 @@
+% Checkpoints inegociáveis da Entrega 2 — UC Engenharia de Usabilidade, UnDF, 2/2026
+% Fontes: UCEngUs_projeto_E2_proposta_2710.pdf e UCEngUs_projeto_E2_ERRATA.pdf
+% Marca: Manual da Marca UnDF (2022). Tipografia: Times New Roman.
+% Compilar: latexmk -lualatex checkpoints_E2.tex
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\setsansfont{Times New Roman}
+\setmonofont{Times New Roman}
+\usepackage[brazil]{babel}
+\usepackage[a4paper,margin=2.2cm,headheight=14pt]{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{tabularx}
+\usepackage[hidelinks]{hyperref}
+
+% Cores institucionais (Manual da Marca UnDF, p. 17)
+\definecolor{undfpreto}{RGB}{35,31,32}
+\definecolor{undfmarinho}{RGB}{39,48,110}
+\definecolor{undfazul}{RGB}{32,98,175}
+\definecolor{cinza}{RGB}{80,80,80}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.6pt}
+\renewcommand{\headrule}{{\color{undfazul}\hrule height\headrulewidth}}
+\fancyhead[L]{\small\color{undfmarinho}Entrega 2 --- checkpoints inegociáveis}
+\fancyhead[R]{\small\color{undfmarinho}UnDF --- Engenharia de Usabilidade}
+\fancyfoot[C]{\small\thepage}
+\fancypagestyle{plain}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}\fancyfoot[C]{\small\thepage}}
+
+\titleformat{\section}{\large\bfseries\color{undfmarinho}}{\thesection}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries\color{undfazul}}{}{0em}{}
+\titlespacing*{\subsection}{0pt}{0.9em}{0.2em}
+
+% Caixa de seleção desenhada (Times New Roman não tem o glifo)
+\newcommand{\caixa}{{\color{undfazul}\setlength{\fboxsep}{0pt}\setlength{\fboxrule}{0.6pt}%
+  \fbox{\phantom{\rule{1.4ex}{1.4ex}}}}}
+\newlist{checks}{itemize}{1}
+\setlist[checks]{label=\caixa,leftmargin=1.5em,itemsep=0.35em,topsep=0.2em}
+% Explicação curta abaixo do item
+\newcommand{\obs}[1]{\\{\small\color{cinza}\textbf{Significa:} #1}}
+
+\renewcommand{\arraystretch}{1.15}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.3em}
+
+\begin{document}
+\color{undfpreto}
+\thispagestyle{plain}
+
+\begin{center}
+  \includegraphics[width=5.5cm]{../../assets/marca/undf-horizontal.pdf}\par\vspace{0.8em}
+  {\Large\bfseries\color{undfmarinho}Entrega 2: checkpoints inegociáveis}\par\vspace{0.2em}
+  {\small Protótipo navegável e memorial de design --- prazo: 24/11, no Moodle, até o início da aula}
+\end{center}
+
+\vspace{0.4em}
+Só entram aqui as exigências explícitas do enunciado e da errata. A regra que
+atravessa tudo: toda decisão de interface aponta para um requisito da Entrega 1.
+
+% ---------------------------------------------------------------------
+\section{Regras gerais}
+
+\begin{checks}
+  \item Esboços, fluxo, wireframe, protótipo, código e textos de interface feitos pelo grupo, sem IA generativa.
+    \obs{rótulos, instruções, botões e mensagens também; decisão ou trecho que o grupo não souber explicar é desconsiderado.}
+  \item Datas: 24/11 entrega no Moodle (uma submissão por grupo); 24/11 a 25/11 às 23h59 avaliação intragrupo; 25 a 30/11 às 23h59 inspeção por pares.
+    \obs{a errata cancelou a apresentação do protótipo na E2.}
+  \item Mesma numeração de telas (Tela 01, Tela 02\ldots) no fluxo, no PDF das telas, no memorial e na matriz.
+    \obs{a numeração nasce no fluxo de navegação (seção 2).}
+\end{checks}
+
+% ---------------------------------------------------------------------
+\section{Entregáveis do grupo}
+
+\begin{checks}
+  \item Memorial de design: \texttt{UCEngUs\_E2\_GrupoX.pdf}.
+  \item Telas do protótipo: \texttt{UCEngUs\_telas\_GrupoX.pdf}, todas as telas, uma por página, com a numeração da seção 2.
+  \item Link do protótipo, informado no memorial.
+  \item Matriz: \texttt{UCEngUs\_matriz\_GrupoX.xlsx}, com as colunas da E2 preenchidas.
+  \item Código da tela principal (opcional pela errata): \texttt{UCEngUs\_codigo\_GrupoX.zip}.
+    \obs{se não houver código, as seções 5 e 6 deixam de valer; no memorial, \texttt{\textbackslash codigofalse}.}
+\end{checks}
+
+% ---------------------------------------------------------------------
+\section{Memorial e protótipo}
+
+\subsection{Seção 1 --- Esboços da tela principal}
+\begin{checks}
+  \item A tela principal tem ao menos um campo de entrada.
+    \obs{é onde a pessoa informa dados ou faz a escolha central do fluxo (formulário, busca, seleção de serviço).}
+  \item Pelo menos duas alternativas bem diferentes, com a adotada indicada.
+    \obs{a descartada vira a ``alternativa descartada'' da decisão obrigatória D1.}
+  \item Fotos das folhas de todos os integrantes no anexo do memorial.
+    \obs{quem faltou em 27/10 desenha fora de sala e apresenta ao grupo; o traço não é avaliado.}
+\end{checks}
+
+\subsection{Seção 2 --- Fluxo de navegação}
+\begin{checks}
+  \item Diagrama de uma página com todas as telas numeradas e as transições.
+  \item Inclui telas de erro e caminhos alternativos.
+  \item Cada tela indica a etapa da HTA a que corresponde.
+    \obs{etapas da E1: 1 (1.1, 1.2, 1.3), 2 (2.1, 2.1'), 3 (3.1).}
+\end{checks}
+
+\subsection{Seção 3 --- Wireframe}
+\begin{checks}
+  \item Wireframe da tela principal, partindo da alternativa escolhida.
+    \obs{sem cor, sem tipografia definitiva e sem imagens; as demais telas podem ir direto ao visual.}
+\end{checks}
+
+\subsection{Seção 4 --- Design visual e protótipo}
+\begin{checks}
+  \item Um único artefato no Figma: os mesmos quadros com visual e interações, conectados.
+  \item Cobre o fluxo crítico de ponta a ponta.
+  \item Link de apresentação aberto a ``qualquer pessoa com o link'' e testado em janela anônima.
+    \obs{sem instalação e sem conta; a errata fixou o Figma.}
+  \item Tokens e componentes nomeados pela função, e alteração no componente vale em todas as telas.
+    \obs{\texttt{cor-acao-principal}, não \texttt{azul-escuro}; \texttt{botao-confirmacao}, não \texttt{botao-verde-grande}.}
+  \item Serviço distrital (SEEC-DF): DSGov opcional.
+    \obs{sem DSGov, quadro com nome, valor e função, com o mínimo de cor (texto principal, texto secundário, fundo, ação, erro), tipografia (título, corpo, apoio), escala de espaçamento e os componentes campo, botão, mensagem de erro e indicador de etapa. Com DSGov, quadro com token ou componente, tela e função; desvios justificados por requisito ou achado.}
+  \item Conteúdo plausível e linguagem simples (Lei n.º 15.263/2025).
+    \obs{nada de ``Lorem ipsum'', ``Usuário 1'' ou ``Erro''; frases curtas, ordem direta, palavras comuns, o mais importante primeiro.}
+  \item Todas as telas na largura de celular; a tela principal também na de computador.
+  \item Estados: erro (cada erro previsto, com mensagem), validação (obrigatório vazio e formato inválido, na tela principal), carregando, vazio, fora do ar (no envio ou na consulta a partir da tela principal).
+\end{checks}
+
+\subsection{Seção 5 --- Código da tela principal (opcional)}
+\begin{checks}
+  \item HTML, CSS e JavaScript que abrem pelo arquivo inicial, sem compilação e sem servidor.
+    \obs{framework só se carregado por link, como o Bootstrap.}
+  \item Cada campo com rótulo associado, campos relacionados agrupados e títulos em hierarquia.
+  \item Tela inteira operável só pelo teclado.
+  \item Ao menos um campo validado em JavaScript, com mensagem em texto associada ao campo e destaque além da cor.
+  \item Quadro de quatro linhas no memorial: gatilho, regra, \textit{feedback} e laço.
+\end{checks}
+
+\subsection{Seção 6 --- Auditoria automática (se houver código)}
+\begin{checks}
+  \item Ferramenta (WAVE, axe DevTools, Lighthouse\ldots) e data da verificação.
+  \item Uma linha por ocorrência: ocorrência, critério WCAG (número e título), elemento e encaminhamento.
+    \obs{encaminhamento: corrigido nesta entrega, a corrigir até a E3, ou falso positivo com justificativa.}
+\end{checks}
+
+\subsection{Seção 7 --- Memorial de design}
+\begin{checks}
+  \item Ordem: fluxo de navegação, wireframe, quadro de tokens e componentes, quadro da validação, tabela da auditoria.
+  \item Cinco decisões de design, cada uma com antes e depois, requisito, origem, alternativa descartada e motivo.
+    \obs{antes = captura do serviço real da E1 ao lado da tela do protótipo com o número; requisito = ID da matriz; origem = achado (A1--A12) ou sessão (S1--S5); motivo em uma frase.}
+  \item Quadro no formato QOC (questão, opções, critérios).
+  \item D1 obrigatória: escolha da alternativa da tela principal; descartada = segunda alternativa dos esboços.
+  \item D2 obrigatória: atende às condições de acesso precário da E1.
+    \obs{na E1: persona 6 (Edilene), classe C3, achado A12, quatro carregamentos de página; requisitos ligados: RU03, RA04, RA07.}
+\end{checks}
+
+% ---------------------------------------------------------------------
+\section{Matriz de rastreabilidade (seção 8)}
+
+\begin{checks}
+  \item Mesmo arquivo modelo da E1, com as duas colunas da E2 preenchidas para todos os requisitos.
+    \obs{vinte linhas: RU01--RU08 e RA01--RA12; nenhum ID renumerado.}
+  \item ``Decisão de design'': referência curta à tela, ao componente ou ao arquivo de código.
+  \item ``Situação na E2'': ``Atendido por decisão'' ou ``Sem decisão''.
+\end{checks}
+
+\begin{center}\footnotesize
+\begin{tabularx}{\textwidth}{|l|Y|l|}\hline
+  ID & Requisito da E1 (resumo) & Origem \\\hline
+  RU01--RU03 & Eficácia: chegar ao formulário sem ajuda; C1, C2 e C3 (celular até 412 px) & A1, A3, A5, A6; S1--S5 \\\hline
+  RU04--RU05 & Eficiência: concluir em até 5 min (pior caso 7 min); C1 e C2 & S1, S3, S5 \\\hline
+  RU06 & Eficiência: no máximo 1 erro de rota em 1.1--2.1; C2 & S1, S2, S4, S5 \\\hline
+  RU07--RU08 & Satisfação: SUS médio 87,5 (pior caso: limite inferior 68); C1 e C2 & S1--S5 \\\hline
+  RA01 & 1.3.1 Informações e relações & A11 \\\hline
+  RA02 & 1.4.3 Contraste mínimo & A4, A9 \\\hline
+  RA03 & 1.4.11 Contraste não textual & A4 \\\hline
+  RA04 & 1.4.10 Refluxo & A12 \\\hline
+  RA05 & 2.1.1 Teclado & A1, A11 \\\hline
+  RA06 & 2.4.7 Foco visível & A11 \\\hline
+  RA07 & 2.5.8 Tamanho do alvo (mínimo) & A12 \\\hline
+  RA08 & 3.2.4 Identificação consistente & A10 \\\hline
+  RA09 & 3.3.2 Rótulos ou instruções & A9 \\\hline
+  RA10 & 4.1.2 Nome, função, valor & A6, A9, A11 \\\hline
+  RA11 & 2.1.2 Sem armadilha de teclado & A9 \\\hline
+  RA12 & 2.4.3 Ordem do foco & A11 \\\hline
+\end{tabularx}
+\end{center}
+
+% ---------------------------------------------------------------------
+\section{Inspeção por pares (individual, errata)}
+
+\begin{checks}
+  \item Até 30/11, 23h59: gravação do percurso e ficha de inspeção pelo Moodle.
+  \item Gravação contínua, sem cortes, iniciada antes de abrir o link pela primeira vez, com microfone e pensando em voz alta.
+    \obs{abrir o link do protótipo sorteado pelo Padlet; câmera não é necessária.}
+  \item Provocar ao menos um erro e mostrar o que o protótipo faz.
+  \item Vídeo no Google Drive institucional, com link público colado na ficha.
+  \item Ficha: percurso (concluiu? onde hesitou ou travou), erro provocado, 3 achados pelas heurísticas de Nielsen e 1 ponto forte específico.
+\end{checks}
+
+% ---------------------------------------------------------------------
+\section{Conceitos que o memorial precisa trabalhar}
+
+\begin{itemize}[leftmargin=1.2em,itemsep=0.15em]
+  \item Esboço, fluxo de navegação, wireframe, design visual e protótipo navegável.
+  \item \textit{Design tokens} e componentes; nome pela função; DSGov.
+  \item Estados de interface: erro, validação, carregando, vazio, fora do ar.
+  \item Linguagem simples (Lei n.º 15.263/2025).
+  \item Validação de formulário: gatilho, regra, \textit{feedback}, laço.
+  \item Auditoria automática de acessibilidade e critérios WCAG 2.2.
+  \item \textit{Design rationale} em formato QOC.
+  \item Rastreabilidade: requisito, decisão e situação.
+  \item Avaliação heurística (Nielsen), para a inspeção por pares.
+\end{itemize}
+
+\end{document}
