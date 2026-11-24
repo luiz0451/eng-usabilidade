@@ -281,8 +281,7 @@ veio.
     Quadro inicial & \preencher{Tela 01 -- nome} \\\hline
     Testado em janela anônima & \preencher{data e integrante que testou, sem conta e sem instalação} \\\hline
     Telas em PDF & \texttt{UCEngUs\_\allowbreak telas\_\allowbreak GrupoB.pdf}, uma tela por página, com a numeração do capítulo~\ref{cap:navegacao}. \\\hline
-    \ifcodigo Código da tela principal & \texttt{UCEngUs\_\allowbreak codigo\_\allowbreak GrupoB.zip}; abrir \preencher{index.html} no navegador, sem compilação e sem servidor. \\\hline\fi
-  \end{tabularx}
+    \end{tabularx}
   \fonte{\autores}
 \end{quadro}\FloatBarrier
 
@@ -314,9 +313,7 @@ do código.}
 \chapter{Fluxo de navegação}\label{cap:navegacao}
 % =====================================================================
 
-\preencher{Uma frase sobre o caminho de sucesso e os caminhos alternativos e de
-erro. O diagrama ocupa uma página e mostra todas as telas numeradas e as
-transições.}
+Foram desenvolvidas telas para representação do caminho de sucesso e os caminhos alternativos de erro, incluindo: tentativa de busca com campo vazio, tentativa de busca com termo menor que 3 letras, representação de indisponibilidade de serviço e busca sem resultados. O fluxo do caminho de sucesso também foi alterado para informar a necessidade de login e de documentação antes da exibição do formulário.
 
 \begin{figure}[!p]
   \centering
@@ -330,11 +327,22 @@ transições.}
   \centering\footnotesize
   \begin{tabularx}{\textwidth}{|P{1.5cm}|Y|P{2.0cm}|P{4.4cm}|}\hline
     Tela & Nome & Etapa da HTA & Tipo (sucesso, alternativo, erro, estado) \\\hline
-    Tela 01 & \preencher{} & \preencher{} & \preencher{} \\\hline
-    Tela 02 & \preencher{} & \preencher{} & \preencher{} \\\hline
-    Tela 03 & \preencher{} & \preencher{} & \preencher{} \\\hline
-    Tela 04 & \preencher{} & \preencher{} & \preencher{} \\\hline
-    Tela 05 & \preencher{} & \preencher{} & \preencher{} \\\hline
+    Tela 01 & Busca de serviços & \preencher{} & Sucesso \\\hline
+    Tela 01a & Validação: campo vazio & \preencher{} & Estado (validação) \\\hline
+    Tela 01b & Validação: texto curto & \preencher{} & Estado (validação) \\\hline
+    Tela 01c & Carregando: buscando serviços & \preencher{} & Estado (carregando) \\\hline
+    Tela 01d & Fora do ar: busca indisponível & \preencher{} & Erro (indisponibilidade) \\\hline
+    Tela 02 & Resultados da busca & \preencher{} & Sucesso \\\hline
+    Tela 02b & Vazio: nenhum resultado & \preencher{} & Erro (nenhum resultado encontrado) \\\hline
+    Tela 03 & Servições de imóveis (caminho alternativo) & \preencher{} & Alternativo \\\hline
+    Tela 04 & Entrar com gov.br (login único) & \preencher{} & Sucesso \\\hline
+    Tela 04a & Carregando: entrando com gov.br & \preencher{} & Estado (carregamento) \\\hline
+    Tela 04b & Erro: login gov.br não concluído & \preencher{} & Erro \\\hline
+    Tela 05 & Emitir guia do ITBI: antes de começar & \preencher{} & Sucesso \\\hline
+    Tela 06 & Formulário com ITBI já escolhido (término) & \preencher{} & Sucesso \\\hline
+    Tela 06a & Fora do ar: formulário indisponível & \preencher{} & Erro (indisponibilidade) \\\hline
+    Tela 06b & Validação: campos com erro & \preencher{} & Estado (validação) \\\hline
+    Tela 06c & Sucesso: pedido registrado & \preencher{} & Sucesso \\\hline
   \end{tabularx}
   \fonte{\autores}
   \nota{A mesma numeração é usada no PDF das telas, nos quadros de decisão e na matriz.}
