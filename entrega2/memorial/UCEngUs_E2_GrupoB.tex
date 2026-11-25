@@ -1,17 +1,3 @@
-% =====================================================================
-% Memorial de design da Entrega 2 -- Engenharia de Usabilidade (UnDF, 2/2026)
-% Compilar com: latexmk -pdf (pdfLaTeX) ou -xelatex. Fonte única: Times.
-% Todas as páginas em A4 retrato, sem páginas giradas.
-%
-% Base gerada a partir do roteiro da E2 (proposta de 27/10 + errata) e do
-% relatório da E1. Tudo em vermelho (\preencher) é conteúdo autoral do grupo:
-% esboços, fluxo, wireframe, telas, tokens, textos de interface, código e
-% decisões de design NÃO podem ser produzidos com IA generativa (seção 1.2).
-%
-% Figuras: coloque os arquivos em ./figuras/. As capturas do serviço real
-% ("antes") são lidas direto de ../../entrega1/relatorio/figuras/.
-% Enquanto o arquivo não existir, aparece uma moldura com o nome esperado.
-% =====================================================================
 \documentclass[
   12pt,
   oneside,
@@ -27,8 +13,6 @@
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{mathptmx}
-  % Uma única família em todo o documento: Times também no lugar de
-  % Helvetica (sf) e Courier (tt).
   \renewcommand{\sfdefault}{ptm}
   \renewcommand{\ttdefault}{ptm}
 \else
@@ -46,12 +30,15 @@
 \usepackage{booktabs}
 \usepackage{placeins}
 \usepackage{microtype}
-\usepackage[alf]{abntex2cite}
+\usepackage[alf,abnt-etal-cite=3,abnt-etal-text=it]{abntex2cite}
 \usepackage{url}
 \urlstyle{same}
 \Urlmuskip=0mu plus 1mu
 % NBR 6023:2018: endereço eletrônico sem os sinais < >
 \def\UrlLeft{}\def\UrlRight{}
+
+\let\oldabntrefinfo\abntrefinfo
+\renewcommand{\abntrefinfo}[3]{\oldabntrefinfo{#1}{#1}{#3}}
 
 \renewcommand{\arraystretch}{1.15}
 \newcolumntype{Y}{>{\raggedright\arraybackslash}X}
@@ -73,7 +60,7 @@
   \renewcommand{\nota}[1]{\par\vspace{2pt}{\footnotesize\raggedright\noindent Nota: #1\par}\vspace{4pt}}%
 }
 
-% Quadro como flutuante próprio (mesmo padrão de lista de quadros)
+% Quadro como flutuante próprio (mesmo padrão da E1)
 \newcommand{\quadroname}{Quadro}
 \newcommand{\listofquadrosname}{Lista de quadros}
 \newfloat[chapter]{quadro}{loq}{\quadroname}
@@ -86,17 +73,11 @@
 
 \newcommand{\preencher}[1]{\textcolor{red}{[#1]}}
 
-% ---------------------------------------------------------------------
-% Código da tela principal (seções 5 e 6 do roteiro).
-% A errata tornou o código OPCIONAL. Se o grupo não entregar o .zip,
-% troque para \codigofalse: somem os capítulos de validação e auditoria.
-% ---------------------------------------------------------------------
+% Código da tela principal (errata da E2: opcional, não entregue nesta etapa)
 \newif\ifcodigo
-\codigotrue
+\codigofalse
 
-% Imagem com fallback: procura em ./figuras/, depois nas figuras da E1;
-% se não achar, desenha uma moldura com o nome do arquivo esperado.
-% \img{opções do includegraphics}{arquivo.ext}
+% Imagem com fallback: procura em ./figuras/, depois nas figuras da E1
 \newcommand{\efig}{../../entrega1/relatorio/figuras}
 \newcommand{\img}[2]{%
   \IfFileExists{figuras/#2}{\includegraphics[#1]{figuras/#2}}{%
@@ -104,7 +85,6 @@
       \fbox{\parbox[c][3.5cm][c]{0.9\linewidth}{\centering
         \preencher{inserir figuras/\detokenize{#2}}}}}}}
 
-% Figura: \fig[largura]{rótulo}{arquivo}{legenda}{fonte}
 \newcommand{\fig}[5][0.95]{%
   \begin{figure}[!htbp]
     \centering
@@ -115,8 +95,7 @@
 \newcommand{\capt}[1]{Secretaria de Economia do DF (#1), acesso em 18 out. 2026}
 \newcommand{\autores}{Elaborado pelos autores (2026).}
 
-% Antes e depois lado a lado, dentro do quadro de decisão.
-% \antesdepois{captura E1}{legenda antes}{tela do protótipo}{legenda depois}
+% Antes e depois lado a lado, dentro do quadro de decisão
 \newcommand{\antesdepois}[4]{%
   \noindent
   \begin{minipage}[b]{0.48\textwidth}\centering
@@ -128,8 +107,7 @@
     {\footnotesize Depois: #4}
   \end{minipage}\par\vspace{6pt}}
 
-% Corpo QOC do quadro de decisão (campos do roteiro, seção 7).
-% \qoc{questão}{opção adotada}{alternativa descartada}{requisito}{origem}{motivo}
+% Corpo QOC do quadro de decisão
 \newcommand{\qoc}[6]{%
   \begin{tabularx}{\textwidth}{|P{3.6cm}|Y|}\hline
     Questão (Q)                 & #1 \\\hline
@@ -143,7 +121,7 @@
 % ---------------------------------------------------------------------
 % Dados do trabalho
 % ---------------------------------------------------------------------
-\titulo{Solicitação de emissão da guia de ITBI no portal da Secretaria de Economia do DF: memorial de design}
+\titulo{Protótipo do fluxo de solicitação de emissão da guia de ITBI no portal da Secretaria de Economia do DF}
 \autor{%
   Ícaro Marra Souza\\
   Karoline Rodrigues Costa\\
@@ -151,14 +129,9 @@
   Luiz Gustavo Silva Carvalho}
 \local{Brasília}
 \data{nov. 2026}
-\instituicao{%
-  Universidade do Distrito Federal -- UnDF
-  \par
-  Unidade Curricular de Engenharia de Usabilidade}
-\tipotrabalho{Memorial de design}
-\preambulo{Memorial de design referente à entrega 2 do projeto da Unidade
+\preambulo{Memorial referente à entrega 2 do projeto da Unidade
 Curricular de Engenharia de Usabilidade, apresentado à Universidade do Distrito
-Federal como requisito de avaliação, sob orientação da Profa. Dr. Carolina
+Federal como requisito de avaliação, sob orientação da Profa. Dra. Carolina
 Gonçalves Abreu.}
 
 \definecolor{blue}{RGB}{41,5,195}
@@ -166,7 +139,7 @@ Gonçalves Abreu.}
 \hypersetup{
   pdftitle={\@title},
   pdfauthor={\@author},
-  pdfsubject={UCEngUs -- Entrega 2},
+  pdfsubject={UCEngUs -- entrega 2},
   pdfcreator={LaTeX com abnTeX2},
   pdfkeywords={usabilidade}{acessibilidade}{protótipo}{design de interface},
   colorlinks=true,
@@ -216,9 +189,23 @@ Gonçalves Abreu.}
 \imprimirfolhaderosto
 
 \begin{resumo}
-\preencher{Resumo do memorial: o que foi redesenhado (fluxo crítico da E1, do
-início ao término), quantas telas, ferramenta do protótipo, conjunto de tokens
-adotado, se houve código e auditoria, e as cinco decisões em uma frase cada.}
+Este trabalho descreve, sobretudo, a proposta de redesenho de interface para o fluxo
+crítico que vai da página inicial de serviços da
+Secretaria de Estado de Economia do Distrito Federal (SEEC) até a abertura do
+formulário de Atendimento Virtual para solicitar a emissão da guia do Imposto
+sobre a Transmissão de Bens Imóveis (ITBI). O processo partiu, assim, de esboços feitos
+à mão em sala, passou pelo mapa de navegação e pelo wireframe da tela principal
+e terminou em um protótipo navegável no Figma; sendo que foram desenhadas telas responsivas, as quais podem ser acessadas tanto no celular quanto no computador. No caso, o fluxo contempla o caminho principal pela busca ou pelos
+serviços mais procurados, uma rota alternativa por assunto e os estados de
+validação, carregamento, vazio, erro e serviço fora do ar. Dado que o serviço
+atual atravessa três sites diferentes e gera confusão de vocabulário e de
+identidade visual, optamos por adotar os tokens e componentes do Padrão Digital
+de Governo (DSGov), com adaptações pontuais para o Distrito Federal. As
+cinco decisões de design registradas no formato QOC unem cada escolha aos
+achados, às sessões e aos vinte requisitos da entrega 1, de modo cobrir a estrutura
+da tela inicial, o acesso precário em celular, a linguagem simples voltada à
+tarefa, a unificação visual com contraste acessível e a antecipação de login e
+documentos antes de um formulário já pré-preenchido.
 
 Palavras-chave: usabilidade, acessibilidade, protótipo, design de interface,
 serviço público digital.
@@ -228,13 +215,16 @@ serviço público digital.
 \cleardoublepage
 \listofquadros*
 \cleardoublepage
+\ifcodigo
 \listoftables*
 \cleardoublepage
+\fi
 
 \begin{siglas}
   \item[DSGov]  Design System do Governo Federal
   \item[HTA]    \textit{Hierarchical Task Analysis} (Análise Hierárquica de Tarefas)
   \item[ITBI]   Imposto sobre a Transmissão de Bens Imóveis \textit{inter vivos}
+  \item[LBI]    Lei Brasileira de Inclusão da Pessoa com Deficiência
   \item[NVDA]   \textit{NonVisual Desktop Access}
   \item[QOC]    \textit{Questions, Options and Criteria} (Questões, opções e critérios)
   \item[RA]     Requisito de acessibilidade
@@ -253,35 +243,41 @@ serviço público digital.
 \chapter{Introdução}\label{cap:introducao}
 % =====================================================================
 
-Este memorial documenta a definição da interface do fluxo crítico delimitado na
-Entrega 1 (E1). Toda decisão de interface aponta para um requisito da E1 (RU01 a
-RU08 e RA01 a RA12) e para o achado (A1 a A12) ou a sessão (S1 a S5) de onde
-veio.
+Aborda-se, neste trabalho, uma proposta de definição da interface para o
+fluxo crítico analisado na entrega 1 (E1), no qual o cidadão precisa encontrar
+e abrir o formulário de solicitação da guia de ITBI no portal da Secretaria de
+Estado de Economia do Distrito Federal \cite{seec}. Assim, seguimos a mesma linha da
+ISO 9241-11:2018 \cite{iso9241-11-2018} adotada no relatório anterior, e também da perspectiva iterativa de design centrado no humano da ISO
+9241-210:2019 \cite{iso9241-210-2019}, em que a solução de interface surge da compreensão do contexto de uso e dos requisitos especificados.
+Por isso, o critério que guiou esta entrega foi a rastreabilidade, sendo que as
+decisão tomada no protótipo se liga a pelo menos um requisito de
+usabilidade (RU01 a RU08) ou de acessibilidade (RA01 a RA12) e ao achado (A1 a
+A12) ou à sessão (S1 a S5) que originou o problema.
+
+No diagnóstico da E1, ficou bem claro que a dificuldade das pessoas não vinha de um
+único detalhe estético, sendo que o principal gargalo estava na descoberta da
+rota e no vocabulário usado pelo órgão. Para chegar ao formulário hoje, o
+usuário sai do portal institucional (\texttt{economia.df.gov.br}), passa pelo
+catálogo da Receita (\texttt{receita.fazenda.df.gov.br}) e depois pelo
+Atendimento Virtual (\texttt{atendimentovirtual.fazenda.df.gov.br}), passando
+por três identidades visuais distintas e por rótulos ligados ao ato jurídico em
+vez da tarefa real. Nas cinco sessões da E1, só uma pessoa conseguiu chegar ao
+formulário sem ajuda, o que reforça que encurtar o caminho e traduzir os
+rótulos era um ponto muito importante.
+
+O Quadro~\ref{qua:ficha} traz os aspectos levantados na entrega 1 bem como os dados de
+acesso ao protótipo navegável.
 
 \begin{quadro}[!htbp]
-  \caption{Escopo herdado da Entrega 1}\label{qua:escopo}
+  \caption{Dados provenientes da entrega 1 e link do protótipo}\label{qua:ficha}
   \centering\small
-  \begin{tabularx}{\textwidth}{|P{3.4cm}|Y|}\hline
-    Fluxo crítico & Encontrar e abrir, a partir da página inicial da Secretaria de Economia do DF, o formulário de Atendimento Virtual para solicitar a emissão da guia de ITBI (E1, capítulo 4). \\\hline
-    Início & \preencher{início do fluxo redesenhado; na E1: página inicial \texttt{economia.df.gov.br}, sem login} \\\hline
-    Término & \preencher{término observável no protótipo; na E1: formulário exibido com Assunto = ITBI} \\\hline
-    Etapas da HTA & 1 Acessar o site da Secretaria (1.1, 1.2, 1.3); 2 Acessar o Atendimento Virtual (2.1, variante 2.1'); 3 Selecionar o serviço ITBI (3.1) (E1, Figura 6 e Quadro 12). \\\hline
-    Classes de contexto & C1 familiarizado com a web; C2 eventual com baixo letramento digital; C3 acesso ou percepção restrita (E1, Quadro 18). \\\hline
-    Personas & 1 Antônio; 2 Júlia; 3 Camila; 4 Rosimeire; 5 Valdir; 6 Edilene; 7 Rafael (E1, capítulo 5). \\\hline
+  \begin{tabularx}{\textwidth}{|P{3.6cm}|Y|}\hline
+    Fluxo crítico & Encontrar e abrir, a partir da entrada de serviços da Secretaria de Economia do DF, o formulário do Atendimento Virtual para solicitar a emissão da guia de ITBI. \\\hline
+    Início e término & Início na página de busca de serviços da Receita do DF, sem login prévio, sendo um equivalente redesenhado da entrada por \texttt{economia.df.gov.br}. Término na exibição do formulário ``Pedir a guia do ITBI'', já com Assunto e Tipo de atendimento selecionados. Como complemento demonstrativo no protótipo, incluíram-se também o estado de validação de campos e a confirmação de pedido registrado. \\\hline
+    Etapas da HTA & 1 Acessar o site da Secretaria (1.1, 1.2, 1.3); 2 Acessar o Atendimento Virtual (2.1 e variante 2.1'); 3 Selecionar o serviço ITBI (3.1). \\\hline
+    Classes e personas & C1 familiarizado com a web (Personas 3 Camila e 7 Rafael); C2 eventual com baixo letramento digital (Personas 1 Antônio e 4 Rosimeire); C3 acesso ou percepção restrita (Personas 2 Júlia, 5 Valdir e 6 Edilene). \\\hline
+    Ferramenta e acesso & \url{https://www.figma.com/proto/ObXREG7SsNPGVHg9CIqmD4/UCEngUs-E2-GrupoB---ITBI--DSGov-?node-id=3-8&t=yMMosWHD1RiHZDEi-1}. \\\hline
   \end{tabularx}
-  \fonte{\autores}
-\end{quadro}
-
-\begin{quadro}[!htbp]
-  \caption{Acesso ao protótipo}\label{qua:prototipo}
-  \centering\small
-  \begin{tabularx}{\textwidth}{|P{3.4cm}|Y|}\hline
-    Ferramenta & Figma \\\hline
-    Link de apresentação & \preencher{link do modo de apresentação; compartilhamento ``qualquer pessoa com o link pode ver''} \\\hline
-    Quadro inicial & \preencher{Tela 01 -- nome} \\\hline
-    Testado em janela anônima & \preencher{data e integrante que testou, sem conta e sem instalação} \\\hline
-    Telas em PDF & \texttt{UCEngUs\_\allowbreak telas\_\allowbreak GrupoB.pdf}, uma tela por página, com a numeração do capítulo~\ref{cap:navegacao}. \\\hline
-    \end{tabularx}
   \fonte{\autores}
 \end{quadro}\FloatBarrier
 
@@ -289,31 +285,82 @@ veio.
 \chapter{Esboços da tela principal}\label{cap:esbocos}
 % =====================================================================
 
-\preencher{Qual é a tela principal (a que tem ao menos um campo de entrada ou a
-escolha central do fluxo) e por que é ela. Mesma tela do wireframe e, se houver,
-do código.}
+A tela principal escolhida é a Tela 01 (Busca de serviços), pois ela ela concentra o ponto mais crítico do fluxo porque é logo na chegada que o
+cidadão tenta traduzir uma necessidade concreta, que é pagar o imposto de um
+imóvel recém-comprado, em algum caminho reconhecível na interface. Na E1,
+quatro das cinco pessoas falharam exatamente nessa transição entre entrada e
+descoberta do serviço, pois S1 precisou entrar e sair de menus até achar um link no
+meio do texto, S2 e S4 se perderam em itens vizinhos do catálogo, S3 desistiu e S5 tentou a barra de busca cinco vezes sem
+sucesso. Além do mais, a Tela 01 possui o campo de
+entrada principal com regras de validação (campo vazio e texto curto), servindo
+de base para o wireframe (capítulo~\ref{cap:wireframe}) e para a adaptação
+entre celular e computador.
 
-\fig[0.8]{esboco-a}{esboco_alternativa_a.png}{Esboço da alternativa A da tela principal (adotada)}{\autores}
-\fig[0.8]{esboco-b}{esboco_alternativa_b.png}{Esboço da alternativa B da tela principal (descartada)}{\autores}
+A partir da exploração dos protótipos de baixa fidelidade feitos a mão, consolidamos duas alternativas bem distintas para a tela
+principal, sendo a Alternativa A 
+(Figura~\ref{fig:esboco-a}), e a B (Figura~\ref{fig:esboco-b}).
 
-\begin{quadro}[!htbp]
-  \caption{Alternativas da tela principal}\label{qua:alternativas}
-  \centering\small
-  \begin{tabularx}{\textwidth}{|P{3.0cm}|Y|Y|}\hline
-    & Alternativa A (adotada) & Alternativa B (descartada) \\\hline
-    Ideia central & \preencher{} & \preencher{} \\\hline
-    Autor do esboço & \preencher{} & \preencher{} \\\hline
-    Diferença principal & \multicolumn{2}{l|}{\preencher{o que torna as duas bem diferentes}} \\\hline
-  \end{tabularx}
-  \fonte{\autores}
-  \nota{A justificativa da escolha está na decisão D1 (capítulo~\ref{cap:decisoes}); as fotos das folhas de todos os integrantes estão no Anexo~\ref{an:esbocos}.}
-\end{quadro}\FloatBarrier
+\fig[0.78]{esboco-a}{esboco_karoline.jpg}{Esboço da alternativa A da tela principal feita pela Karoline Costa}{\autores}
+\fig[0.78]{esboco-b}{esboco_leonardo.jpg}{Esboço da alternativa B da tela principal feira pelo Leonardo Brito}{\autores}
+
+Quanto à concepção, a alternativa A foca em uma tela de entrada única e
+direta, pois logo abaixo do cabeçalho, a barra de busca aparece em destaque com
+campo visível e lupa, seguida imediatamente por uma lista vertical curta com as
+tarefas mais procuradas. No caso, a ideia é diminuir o golfo de execução
+\cite{norman2013}, colocando o objetivo do usuário logo no início da tela, como
+o próprio participante de S3 sugeriu na entrevista, e ainda oferecer uma rota
+secundária por assunto para quem prefere navegar clicando.
+
+Já a alternativa B mantém uma arquitetura mais próxima da lógica hierárquica
+do portal atual, organizando a entrada por menu retrátil e agrupamentos por
+perfil de público (\textit{Atendimento Cidadão}, \textit{Atendimento Empresa})
+e categorias de tributos (\textit{Serviços} $\rightarrow$ \textit{Imóveis}
+$\rightarrow$ \textit{ITBI}), sem propociar enfoque à busca. Apesar de parecer
+familiar a quem já conhece a divisão interna da Secretaria, essa estrutura
+reproduz dois problemas medidos na E1, sendo que força escolhas sequenciais em múltiplos
+níveis, aumentando o tempo de decisão pela Lei de Hick-Hyman \cite{hick1952}, e
+exige que a pessoa saiba de antemão em qual opção a emissão do imposto foi
+colocado.
 
 % =====================================================================
 \chapter{Fluxo de navegação}\label{cap:navegacao}
 % =====================================================================
 
-Foram desenvolvidas telas para representação do caminho de sucesso e os caminhos alternativos de erro, incluindo: tentativa de busca com campo vazio, tentativa de busca com termo menor que 3 letras, representação de indisponibilidade de serviço e busca sem resultados. O fluxo do caminho de sucesso também foi alterado para informar a necessidade de login e de documentação antes da exibição do formulário.
+Com a estrutura da tela inicial definida, desenvolvemos o mapa de navegação
+do início até a abertura do formulário (Figura~\ref{fig:fluxo-nav}). No serviço
+real analisado na E1, o caminho sem erro requeria cinco cliques e quatro
+carregamentos de página espalhados em três subdomínios, sendo que a única pessoa
+que concluiu (S1) precisou de sete cliques pela variante do catálogo. No
+redesenho, as etapas 1.1 a 1.3 da HTA (menus em cascata e escolha de perfil) e
+a etapa 3.1 (escolha do serviço) foram trazidas para a porta de entrada em um
+único domínio. Assim, a pessoa passa a contar com três caminhos paralelos para
+o mesmo destino, pois ela pode pesquisar por palavra-chave (Tela 01 $\rightarrow$ Tela 02),
+clicar no atalho de ``Mais procurados'' (Tela 01 $\rightarrow$ Tela 04)
+ou navegar por assunto quando não quiser digitar (Tela 01 $\rightarrow$ Tela 03
+$\rightarrow$ Tela 04).
+
+Outro ponto importante foi reorganizar a passagem até o formulário, dado que o
+diagnóstico mostrou que omitir a exigência de login e de documentos até o
+final do percurso gera frustração e abandono tardio (achado A8). Por isso, o fluxo redesenhado posiciona a autenticação única pelo gov.br
+(Tela 04) e uma tela intermediária de orientação prévia (Tela 05) logo antes do formulário. Nessa etapa, o cidadão já fica sabendo que
+vai precisar do número da matrícula do imóvel, do contrato ou escritura e do
+valor da compra.
+
+Além do caminho de melhor caso, mapeamos os estados de erro, validação, carregamento,
+vazio e indisponibilidade previstos para uma navegação realista, como a busca com
+campo vazio (Tela 01a), busca com menos de três letras (Tela 01b), carregamento
+da consulta (Tela 01c), busca fora do ar mantendo a lista de atalhos clicável
+(Tela 01d), busca sem resultado (Tela 02a), carregamento e cancelamento ou falha
+do login no gov.br (Telas 04a e 04b) e formulário indisponível (Tela 06a).
+
+Quanto ao encerramento, o fluxo crítico
+delimitado na E1 se encerra com a na exibição do formulário aberto com o serviço de ITBI
+já escolhido (Tela 06), como mostra o diagrama da
+Figura~\ref{fig:fluxo-nav}. Ainda assim, incluímos no protótipo navegável do
+Figma as telas 06b (validação de campos com erro no formulário) e
+06c (confirmação de pedido registrado com protocolo), de modo a funcionar como
+demonstração complementar de prevenção e recuperação de erro. O Quadro~\ref{qua:telas} mostra, sobretudo, as
+telas, sua correspondência na HTA e o papel de cada uma no fluxo.
 
 \begin{figure}[!p]
   \centering
@@ -323,238 +370,240 @@ Foram desenvolvidas telas para representação do caminho de sucesso e os caminh
 \end{figure}
 
 \begin{quadro}[!htbp]
-  \caption{Telas do protótipo, etapa da HTA e estados}\label{qua:telas}
+  \caption{Telas do protótipo, etapa da HTA e comportamento previsto}\label{qua:telas}
   \centering\footnotesize
-  \begin{tabularx}{\textwidth}{|P{1.5cm}|Y|P{2.0cm}|P{4.4cm}|}\hline
-    Tela & Nome & Etapa da HTA & Tipo (sucesso, alternativo, erro, estado) \\\hline
-    Tela 01 & Busca de serviços & HTA 1 e 3.1 & Sucesso \\\hline
-    Tela 01a & Validação: campo vazio & HTA 1 & Estado (validação) \\\hline
-    Tela 01b & Validação: texto curto & HTA 1 & Estado (validação) \\\hline
-    Tela 01c & Carregando: buscando serviços & \preencher{} & Estado (carregando) \\\hline
-    Tela 01d & Fora do ar: busca indisponível & \preencher{} & Erro (indisponibilidade) \\\hline
-    Tela 02 & Resultados da busca & HTA 3.1 & Sucesso \\\hline
-    Tela 02b & Vazio: nenhum resultado & \preencher{} & Erro (nenhum resultado encontrado) \\\hline
-    Tela 03 & Serviços de imóveis (caminho alternativo) & HTA 1.2-1.3 & Alternativo \\\hline
-    Tela 04 & Entrar com gov.br (login único) & HTA 2 & Sucesso \\\hline
-    Tela 04a & Carregando: entrando com gov.br & \preencher{} & Estado (carregamento) \\\hline
-    Tela 04b & Erro: login gov.br não concluído & \preencher{} & Erro \\\hline
-    Tela 05 & Emitir guia do ITBI: antes de começar & HTA 2 & Sucesso \\\hline
-    Tela 06 & Formulário com ITBI já escolhido (término) &  & Sucesso \\\hline
-    Tela 06a & Fora do ar: formulário indisponível & \preencher{} & Erro (indisponibilidade) \\\hline
+  \begin{tabularx}{\textwidth}{|P{1.4cm}|P{3.6cm}|P{2.3cm}|Y|}\hline
+    Tela & Nome & Etapa da HTA & Tipo e comportamento no fluxo \\\hline
+    Tela 01 & Busca de serviços (principal) & HTA 1 (1.1--1.3) e 3.1 (redesenho) & entrada única com busca, ``Mais procurados'' e rota por assunto. \\\hline
+    Tela 01a & Validação: campo vazio & HTA 1 & impede busca vazia, destaca a borda e pede que a pessoa escreva o que precisa fazer. \\\hline
+    Tela 01b & Validação: texto curto & HTA 1 & ao digitar menos de 3 letras, mantém o texto e pede ao menos 3 caracteres. \\\hline
+    Tela 01c & Carregando busca & HTA 1 & indicador de processamento ``Buscando serviços...'' após acionar a pesquisa. \\\hline
+    Tela 01d & Busca fora do ar & HTA 1 & avisa a indisponibilidade com ``Tentar de novo'', mantendo ``Mais procurados'' clicável abaixo. \\\hline
+    Tela 02 & Resultados da busca & HTA 3.1 & lista os serviços encontrados com nome da tarefa e breve explicação do imposto. \\\hline
+    Tela 02a & Vazio: sem resultados & HTA 3.1 & para termo sem retorno, sugere palavras simples, nova busca e atalho para ``Imóveis''. \\\hline
+    Tela 03 & Serviços de imóveis & HTA 1.2--1.3 e 3.1 & lista as ações ligadas a imóveis (emitir guia, IPTU, contestar valor, isenção, devolução) em linguagem simples. \\\hline
+    Tela 04 & Entrar com gov.br & HTA 2.1 & explica o login único sem senha separada da Receita e o retorno direto ao serviço escolhido. \\\hline
+    Tela 04a & Carregando login & HTA 2.1 & exibe ``Entrando com gov.br...'' com botão ``Cancelar login'' visível. \\\hline
+    Tela 04b & Erro no login gov.br & HTA 2.1 & informa cancelamento ou demora, tranquiliza que nenhum dado foi enviado e oferece tentar de novo ou voltar. \\\hline
+    Tela 05 & Antes de começar & HTA 2 (A8) & apresenta os documentos necessários antes da digitação e confirma os dados trazidos do gov.br. \\\hline
+    Tela 06 & Formulário com ITBI escolhido & Término & abre ``Pedir a guia do ITBI'' com \textit{Assunto}, \textit{Tipo de atendimento} e dados cadastrais pré-preenchidos. \\\hline
+    Tela 06a & Formulário fora do ar & Término & informa falha na abertura do Atendimento Virtual com opção de tentar novamente, voltar ou ligar 156. \\\hline
+    Tela 06b & Validação no formulário & Complementar & demonstra resumo de erros no topo e mensagens específicas nos campos de e-mail, matrícula e descrição. \\\hline
+    Tela 06c & Pedido registrado & Complementar & exibe número de protocolo, prazo de envio da guia por e-mail e atalho para consultar o pedido. \\\hline
   \end{tabularx}
   \fonte{\autores}
-  \nota{A mesma numeração é usada no PDF das telas, nos quadros de decisão e na matriz.}
 \end{quadro}\FloatBarrier
 
 % =====================================================================
 \chapter{Wireframe da tela principal}\label{cap:wireframe}
 % =====================================================================
 
-\preencher{O que entra na tela e em que ordem, partindo da alternativa A. Sem cor,
-tipografia definitiva nem imagens.}
+Haja vista o wireframe de baixa fidelidade (Figura~\ref{fig:wireframe}), que desenvolvemos a partir do esboço, o objetivo nessa fase foi testar a
+hierarquia da informação e a sequência de leitura sem nos distrairmos com a ui. No
+formato de celular, toda a página foi organizada em coluna única, pensando no
+refluxo para telas estreitas sem rolagem horizontal (achado A12, RU03 e RA04),
+de modo que a ordem visual coincida com a ordem de navegação por teclado
+(achado A11, RA05, RA06 e RA12). A estrutura ficou, assim, dividida em seis blocos:
 
-\fig[0.55]{wireframe}{wireframe_tela_principal.png}{Wireframe da tela principal (Tela \preencher{nn}), largura de celular}{\autores}
+\begin{enumerate}
+  \item Cabeçalho único: identifica o Governo do DF e Receita do DF e o botão de ``Entrar'' e os controles de navegação na mesma posição em todo o fluxo.
+  \item Título e instrução com exemplo: traz ``Serviços da Receita do DF'', buscando orientar já na primeira dobra sem depender do jargão interno.
+  \item Busca como entrada principal: rótulo sempre visível, dica de palavras cotidianas e o botão ``Buscar'' dimensionado com 40~px de altura para facilitar o toque em tela pequena.
+  \item Lista ``Mais procurados'': quatro tarefas comuns nomeadas pelo verbo da ação e acompanhadas da explicação da sigla no subtítulo, destacando ``Emitir guia do ITBI -- Imposto sobre a compra de imóvel (ITBI)''.
+  \item Rota alternativa por assunto: seção ``Não achou? Veja os serviços por assunto'' (Imóveis, Veículos, Empresas e Certidões), criada justamente porque em S1 a S4 nenhum participante recorreu à barra de pesquisa de primeira, preferindo explorar categorias (A1, A7 e RU06).
+  \item Apoio e rodapé: aviso com telefone 156 e atendimento presencial visível sem sair da página, de mdo a acolher quem precisa de auxílio humano, como apareceu nas sessões S1, S3 e S4 (RU02).
+\end{enumerate}
+
+Na adaptação do wireframe para largura de computador, preservamos a
+mesma prioridade de leitura, sendo que o cabeçalho passa a mostrar diretamente
+os atalhos de ``Acessibilidade'' e ``Alto contraste'', enquanto ``Mais
+procurados'' e ``Serviços por assunto'' ficam dispostos lado a lado em duas
+colunas logo abaixo da busca.
+
+\fig[0.55]{wireframe}{wireframe_tela_principal.png}{Wireframe da tela principal (Tela 01), largura de celular}{\autores}
 
 % =====================================================================
 \chapter{Design visual e protótipo}\label{cap:visual}
 % =====================================================================
 
-\section{Tokens e componentes}\label{sec:tokens}
+\section{Componentes}\label{sec:tokens}
 
-% O serviço é DISTRITAL (SEEC-DF): o uso do DSGov é opcional.
-% - Se o grupo NÃO adotar o DSGov: mantenha o Quadro "Tokens e componentes
-%   próprios" (nome, valor, função) e apague o quadro do padrão.
-% - Se adotar: siga a regra do serviço federal, mantenha o quadro do padrão
-%   (token ou componente, tela, função) e apague o quadro próprio. Desvios do
-%   padrão são justificados por requisito ou achado da E1.
-% Nomes pela função (cor-acao-principal), nunca pela aparência (azul-escuro).
+Ainda que o serviço pertença ao Governo do Distrito Federal, em que seguir o
+Padrão Digital de Governo \cite{dsgov} não é obrigatório, decidimos adotar os
+tokens e componentes do DSGov em todo o protótipo. Dois pontos da E1 influenciaram
+essa escolha, dado que o padrão resolve de uma vez a fragmentação entre os
+três sites atuais da SEEC e as falhas de contraste medidas em A2, A4 e A10.
+E, ainda, aproveita padrões que parte dos cidadãos já reconhece de outros
+serviços públicos digitais, algo que ocorreu em S2, quando
+a participante comparou o portal do GDF ao federal e comentou que neste último
+as funções eram bem mais óbvias de achar.
 
-\preencher{Declarar se o grupo adotou o Padrão Digital de Governo
-\cite{dsgov} ou um conjunto próprio, e por quê.}
-
-\begin{quadro}[!htbp]
-  \caption{Tokens e componentes próprios}\label{qua:tokens}
-  \centering\footnotesize
-  \begin{tabularx}{\textwidth}{|P{4.0cm}|P{2.6cm}|Y|}\hline
-    Token ou componente & Valor & Função \\\hline
-    \multicolumn{3}{|l|}{\textit{Cor}} \\\hline
-    \preencher{texto principal} & \preencher{} & \preencher{} \\\hline
-    \preencher{texto secundário} & \preencher{} & \preencher{} \\\hline
-    \preencher{fundo} & \preencher{} & \preencher{} \\\hline
-    \preencher{ação} & \preencher{} & \preencher{} \\\hline
-    \preencher{erro} & \preencher{} & \preencher{} \\\hline
-    \multicolumn{3}{|l|}{\textit{Tipografia}} \\\hline
-    \preencher{título} & \preencher{} & \preencher{} \\\hline
-    \preencher{corpo} & \preencher{} & \preencher{} \\\hline
-    \preencher{apoio} & \preencher{} & \preencher{} \\\hline
-    \multicolumn{3}{|l|}{\textit{Espaçamento (escala)}} \\\hline
-    \preencher{} & \preencher{} & \preencher{} \\\hline
-    \multicolumn{3}{|l|}{\textit{Componentes}} \\\hline
-    \preencher{campo} & \preencher{} & \preencher{} \\\hline
-    \preencher{botão} & \preencher{} & \preencher{} \\\hline
-    \preencher{mensagem de erro} & \preencher{} & \preencher{} \\\hline
-    \preencher{indicador de etapa} & \preencher{} & \preencher{} \\\hline
-  \end{tabularx}
-  \fonte{\autores}
-  \nota{Os pares de cor de texto e de estado atendem 1.4.3 e 1.4.11 da WCAG 2.2 \cite{wcag22} (RA02, RA03): \preencher{razões medidas}.}
-\end{quadro}
+No Figma, cadastramos 29 variáveis semânticas na coleção \textit{DSGov tokens}, além de um modo sem cor usado para o wireframe. Os blocos recorrentes
+foram montados como componentes reutilizáveis para manter consistência entre
+todas as telas. O Quadro~\ref{qua:tokens-dsgov} sintetiza os tokens e
+componentes empregados no fluxo, junto das razões de contraste calculadas pela
+fórmula da WCAG 2.2 \cite{wcag22}.
 
 \begin{quadro}[!htbp]
-  \caption{Tokens e componentes do Padrão Digital de Governo usados no fluxo}\label{qua:tokens-dsgov}
+  \caption{Tokens e componentes do DSGov}\label{qua:tokens-dsgov}
   \centering\footnotesize
-  \begin{tabularx}{\textwidth}{|P{4.4cm}|P{2.0cm}|Y|}\hline
-    Token ou componente do padrão & Tela & Função no fluxo \\\hline
-    \preencher{} & \preencher{} & \preencher{} \\\hline
-    \preencher{} & \preencher{} & \preencher{} \\\hline
-    \preencher{} & \preencher{} & \preencher{} \\\hline
+  \begin{tabularx}{\textwidth}{|P{4.7cm}|P{2.1cm}|Y|}\hline
+    Token / componente & Telas & Utilização no fluxo \\\hline
+    \texttt{cor/acao-principal} (\texttt{\#1351B4}) e \texttt{acao-principal-escura} (\texttt{\#0C326F}) & 01 a 06c & Botões primários, links de retorno e ações de destaque (7,33:1 e 12,34:1 sobre \texttt{\#FFFFFF}). \\\hline
+    \texttt{cor/texto-principal} (\texttt{\#333333}) e \texttt{texto-apoio} (\texttt{\#555555}) & 01 a 06c & Títulos, rótulos, instruções e subtítulos (12,63:1 e 7,46:1 sobre \texttt{\#FFFFFF}). \\\hline
+    \texttt{cor/fundo} (\texttt{\#FFFFFF}), \texttt{fundo-alternativo} (\texttt{\#F8F8F8}), \texttt{borda-campo} (\texttt{\#888888}) e \texttt{divisor} (\texttt{\#CCCCCC}) & 01 a 06c & Fundo das páginas, destaque suave, bordas de campos (3,54:1 sobre \texttt{\#FFFFFF}, acima de 3:1) e linhas divisórias decorativas. \\\hline
+    \texttt{cor/erro} (\texttt{\#E52207}) e \texttt{erro-fundo} (\texttt{\#FDE0DB}) & 01a, 01b, 01d, 04b, 06a, 06b & Bordas, ícones e texto de erro sobre branco (4,60:1). Nos cartões com \texttt{erro-fundo}, o texto usa \texttt{\#333333} (10,14:1) e o ícone/borda mantém 3,69:1. \\\hline
+    \texttt{cor/sucesso} (\texttt{\#168821} / \texttt{\#E3F5E1}), \texttt{informacao} (\texttt{\#155BCB} / \texttt{\#D4E5FF}) e \texttt{alerta} (\texttt{\#FFCD07} / \texttt{\#FFF5C2}) & 01, 02a, 04, 05, 06, 06c & Caixas de orientação, aviso de dados do gov.br, estado vazio e protocolo. Textos internos em \texttt{\#333333} garantem contraste superior a 10:1 (ex.: 11,49:1 sobre \texttt{\#FFF5C2}). \\\hline
+    \texttt{cor/foco} (\texttt{\#C2850C}), \texttt{rodape} (\texttt{\#071D41}) e \texttt{texto-sobre-escuro} (\texttt{\#FFFFFF}) & 01 a 06c & Contorno de foco de teclado (3,16:1 sobre \texttt{\#FFFFFF}, atendendo 1.4.11) e rodapé institucional (16,65:1). \\\hline
+    \texttt{espaco} (4, 8, 16, 24, 32 e 40~px), \texttt{raio} (4, 8 e 100~px) e \texttt{altura/alvo} (40~px) & 01 a 06c & Separação entre blocos e campos, arredondamento padronizado e altura mínima de 40~px para alvos clicáveis, superando o mínimo de 24~px de RA07. \\\hline
+    Cabeçalho (\texttt{br-header}) e Rodapé (\texttt{br-footer}) & 01 a 06c & Identidade única da Receita do DF, login/usuário logado e canais de ajuda (156 e presencial). \\\hline
+    Campo (\texttt{br-input}) e Área de texto (\texttt{br-textarea}) & 01 a 02, 06, 06b & Busca de serviços, dados cadastrais e descrição do pedido com limite de caracteres e instrução de saída por Tab. \\\hline
+    Botões (\texttt{br-button}) e Lista (\texttt{br-list} / \texttt{br-item}) & 01 a 06c & Ações principais e secundárias; listas clicáveis com título da tarefa, explicação da sigla e seta indicativa. \\\hline
+    Mensagens (\texttt{br-message}), Seletores (\texttt{br-radio} / \texttt{br-checkbox}) e Carregamento (\texttt{br-loading}) & 01 a 06c & Alertas de erro, validação, vazio e indisponibilidade; opções do formulário e feedback de processamento. \\\hline
   \end{tabularx}
   \fonte{\autores, com base em \citeonline{dsgov}.}
 \end{quadro}\FloatBarrier
 
-\section{Telas, larguras e estados}\label{sec:estados}
+Em relação ao padrão federal original, fizemos duas mudanças, as quais sao justificadas pelos achados da E1:
 
-Todas as telas estão na largura de celular; a tela principal também está na
-largura de computador. Os textos seguem a Política Nacional de Linguagem Simples
-\cite{linguagemsimples2025}.
+\begin{itemize}
+  \item No lugar da marca ``gov.br'', o cabeçalho exibe ``GDF -- Governo do Distrito Federal / Receita do DF / Secretaria de Economia do DF''. A mudança reflete a jurisdição do serviço, mantendo a mesma anatomia e previsibilidade do DSGov do início ao fim do percurso.
+  \item No serviço real, a área ``Descrição da Solicitação'' abre um editor de texto completo com mais de uma dezena de botões sem rótulo que ainda prende o foco do teclado (A9 e A11). No protótipo, reduzimos a barra de formatação e adicionamos a instrução explícita ``Até 4.000 caracteres. Use Tab para sair do editor.'', de modo a cumprir RA09, RA10 e RA11.
+\end{itemize}
 
-\fig[0.9]{principal-desktop}{tela_principal_desktop.png}{Tela principal (Tela \preencher{nn}) na largura de computador}{\autores}
+Vale observar, ainda, que as ações secundárias do Atendimento Virtual real
+(``Consultar pedido'', ``Reabrir pedido'', ``Complementar pedido'', ``Avaliar
+atendimento'' e ``Passo a passo''), que antes distraiam o usuário no topo da tela com a
+ação principal (achado A8), foram deslocadas para a base do formulário na Tela
+06, de modo a preservar as funcionalidades do órgão sem encher demais a entrada com várias opções.
 
-\begin{quadro}[!htbp]
-  \caption{Estados representados no protótipo}\label{qua:estados}
-  \centering\footnotesize
-  \begin{tabularx}{\textwidth}{|P{2.4cm}|P{4.2cm}|P{1.6cm}|Y|}\hline
-    Estado & Onde precisa aparecer & Tela & Situação representada \\\hline
-    Erro & Em cada caso de erro previsto no fluxo, com a mensagem & \preencher{} & \preencher{} \\\hline
-    Validação & Na tela principal: campo obrigatório vazio & \preencher{} & \preencher{} \\\hline
-    Validação & Na tela principal: formato inválido & \preencher{} & \preencher{} \\\hline
-    Carregando & Em toda etapa com processamento perceptível & \preencher{} & \preencher{} \\\hline
-    Vazio & Em toda tela que possa aparecer sem conteúdo & \preencher{} & \preencher{} \\\hline
-    Fora do ar & No envio ou na consulta feita a partir da tela principal & \preencher{} & \preencher{} \\\hline
-  \end{tabularx}
-  \fonte{\autores}
-\end{quadro}\FloatBarrier
+\section{Telas}\label{sec:estados}
+
+Todas as telas foram projetadas primeiro na largura de celular, levando em conta que o smartphone é o principal meio de acesso à
+internet no Brasil \cite{ticdomicilios} e que S4 relatou excesso de botões e
+informação ao tentar o fluxo pelo telefone. Embora o quadro no Figma use 360~px
+(atendendo com folga ao recorte de até 412~px de RU03), o layout de coluna
+única sem tabelas largas foi desenhado para suportar o refluxo até 320~px sem
+rolagem horizontal (RA04). A tela principal (Figura~\ref{fig:principal-desktop})
+e o restante do fluxo navegável também possuem versão para computador, de modo a distruibuir ``Mais procurados'' e ``Serviços por assunto'' lado a
+lado.
+
+\fig[0.9]{principal-desktop}{tela_principal_desktop.png}{Tela principal (Tela 01) na versão web}{\autores}
+
+No conteúdo, evitamos o uso de texto fictício genérico dado que as telas usam
+exemplos plausíveis para o contexto do DF (solicitante fictícia Maria da Silva
+Souza, protocolo \texttt{2026.0012345}, matrícula \texttt{123456}). Além disso, aplicamos as diretrizes da Política Nacional de Linguagem Simples
+\cite{linguagemsimples2025}, usando frases curtas, voz ativa e termos
+cotidianos ao inves do jargão da carta de serviços atual (como trocar
+``Transmissão Onerosa (Lançamento de ITBI)'' por ``Emitir guia do ITBI (Imposto sobre a compra de imóvel)'').
+
+Quanto aos estados de interação e falha, os cenários previstos
+foram representados nas telas do protótipo de modo a evitar deixar o
+usuário sem saber como proceder quando algo dá errado:
+
+\begin{itemize}
+  \item Validação de campo obrigatório vazio (Tela 01a e Tela 06b): ao acionar ``Buscar'' sem digitar nada, o campo fica borda vermelha, ícone de alerta e a mensagem ``Escreva o que você precisa fazer para buscar.''. De forma complementar, na Tela 06b o resumo aponta os três campos pendentes e o campo de descrição vazio mostra instrução com exemplo.
+  \item Validação de formato inválido (Tela 01b e Tela 06b): se a pessoa digitar menos de três letras na busca, o sistema mantém o que foi escrito e orienta ``Escreva pelo menos 3 letras. Exemplo: ITBI.''. Na Tela 06b, e-mails diferentes e matrícula preenchida com letras ou traço mostram uma correção específica proximo ao campo.
+  \item Carregando (Telas 01c e 04a): durante a consulta de serviços aparece ``Buscando serviços...'' e, na autenticação, ``Entrando com gov.br...'' acompanhado do botão ``Cancelar login'' para que a pessoa não fique presa em caso de lentidão.
+  \item Estado vazio (Tela 02a): quando a pesquisa não encontra correspondência, a tela informa ``Nenhum serviço encontrado'', sugere termos simples (``guia, imposto ou imóvel''), oferece ``Fazer nova busca'' e já entrega um atalho direto para a categoria ``Imóveis''.
+  \item Erro de autenticação (Tela 04b): se o login no gov.br for cancelado ou expirar, a mensagem explica o ocorrido (``Você não concluiu o login''), assegura que nenhum dado foi enviado e oferece ``Tentar de novo'' ou ``Voltar para o início''.
+  \item Serviço fora do ar (Telas 01d e 06a): se a busca falhar (01d), o aviso ``A busca está fora do ar'' traz o botão ``Tentar de novo'' e mantém a lista ``Mais procurados'' logo abaixo como rota alternativa. Se o próprio Atendimento Virtual estiver indisponível (06a), a tela informa o problema e oferece tentar de novo, voltar ao início ou ligar no 156.
+\end{itemize}
 
 \ifcodigo
-% =====================================================================
 \chapter{Validação na tela em código}\label{cap:validacao}
-% =====================================================================
-
-\preencher{Campo validado em JavaScript, onde está no código (arquivo e função) e
-como a mensagem fica associada ao campo (por exemplo, \texttt{aria-describedby})
-com destaque além da cor.}
-
-\begin{quadro}[!htbp]
-  \caption{Validação do campo \preencher{nome do campo}}\label{qua:validacao}
-  \centering\small
-  \begin{tabularx}{\textwidth}{|P{3.0cm}|Y|}\hline
-    Gatilho  & \preencher{quando a validação dispara} \\\hline
-    Regra    & \preencher{o que é verificado} \\\hline
-    Feedback & \preencher{o que a pessoa vê e o leitor de tela anuncia} \\\hline
-    Laço     & \preencher{como a pessoa corrige e quando a mensagem some} \\\hline
-  \end{tabularx}
-  \fonte{\autores}
-\end{quadro}\FloatBarrier
-
-% =====================================================================
 \chapter{Auditoria automática de acessibilidade}\label{cap:auditoria}
-% =====================================================================
-
-Ferramenta: \preencher{WAVE, axe DevTools, Lighthouse ou outra, com versão}.
-Data da verificação: \preencher{dd/mm/2026}.
-
-\begin{table}[!htbp]
-  \caption{Ocorrências da auditoria automática}\label{tab:auditoria}
-  \centering\footnotesize
-  \begin{tabularx}{\textwidth}{|Y|P{3.0cm}|P{2.6cm}|Y|}\hline
-    Ocorrência & Critério WCAG & Elemento & Encaminhamento \\\hline
-    \preencher{descrição dada pela ferramenta} & \preencher{número e título} & \preencher{campo, botão ou trecho} & \preencher{corrigido nesta entrega; a corrigir até a E3; ou falso positivo, com justificativa} \\\hline
-  \end{tabularx}
-  \fonte{\autores, com \preencher{ferramenta}.}
-\end{table}\FloatBarrier
 \fi
 
 % =====================================================================
 \chapter{Decisões de design}\label{cap:decisoes}
 % =====================================================================
 
-Cada decisão segue o formato QOC \cite{maclean1991}: a questão de design, as
-opções consideradas e os critérios, que são o requisito da matriz e o achado ou
-a sessão da E1 de onde ele veio. D1 e D2 são obrigatórias: D1 é a escolha da
-alternativa da tela principal, e D2 atende às condições de acesso precário
-mapeadas na E1.
+As decisões principais do redesenho foram documentadas, de forma gera, seguindo o formato QOC
+(\textit{Questions, Options and Criteria}), proposto por
+\citeonline{maclean1991}. Esse método ajuda a deixar explícito não só o que entrou
+no protótipo, mas também qual alternativa foi descartada e quais requisitos e
+evidências da E1 pesaram na escolha. Assim, D1 registra a escolha da alternativa da tela
+principal a partir dos esboços em sala e D2 trata das condições de acesso
+precário (no caso, a persona 6, Edilene). Já D3, D4 e D5 abrangem o vocabulário em linguagem
+simples, a unificação visual com contraste acessível e a reorganização dos
+pré-requisitos dada a simplificação do formulário.
 
 % D1 -------------------------------------------------------------------
 \begin{quadro}[!htbp]
-  \caption{Decisão D1 --- alternativa adotada para a tela principal}\label{qua:d1}
+  \caption{Decisão D1, alternativa adotada para a tela principal}\label{qua:d1}
   \centering\small
-  \antesdepois{fig_form.png}{E1, Figura 5}{tela_principal.png}{Tela \preencher{nn}}
-  \qoc{\preencher{questão}}%
-      {Alternativa A: \preencher{}}%
-      {Alternativa B (segundo esboço): \preencher{}}%
-      {\preencher{ID da matriz}}%
-      {\preencher{achado A\# ou sessão S\#}}%
-      {\preencher{uma frase}}
+  \antesdepois{fig_home.png}{E1, Figura 1 (menu Serviços em cascata)}{tela_01_mobile.png}{Tela 01 (Busca de serviços)}
+  \qoc{Como organizar a tela inicial para que tanto quem prefere pesquisar quanto quem prefere navegar ache o serviço de ITBI sem precisar decifrar menus administrativos?}%
+      {Alternativa A: página de entrada única com busca em destaque no topo, seguida por lista curta de ``Mais procurados'' nomeados pela tarefa e acesso secundário por assunto.}%
+      {Alternativa B (esboço descartado): entrada estruturada por menu lateral/superior dividido por perfil de público (\textit{Atendimento Cidadão}, \textit{Atendimento Empresa}) e categorias hierárquicas (\textit{Serviços} $\rightarrow$ \textit{Imóveis} $\rightarrow$ \textit{ITBI}), sem destaque para a busca.}%
+      {RU01, RU02, RU04, RU06, RA01, RA05, RA12}%
+      {Achados A1, A5, A7 e A11; sessões S1 a S5; personas 1, 3, 4, 5 e 7.}%
+      {Reunir busca visível, tarefas frequentes na primeira dobra e categorias simples reduz o número de escolhas simultâneas (Lei de Hick-Hyman) \cite{hick1952}, atende aos dois estilos de uso vistos nas sessões e elimina o menu em cascata que só abria por \textit{hover}, permitindo uma ordem de foco previsível por teclado.}
   \fonte{\autores}
 \end{quadro}\FloatBarrier
 
 % D2 -------------------------------------------------------------------
-% Acesso precário na E1: persona 6 (Edilene), classe C3, achado A12;
-% requisitos ligados: RU03, RA04 (refluxo) e RA07 (tamanho do alvo).
 \begin{quadro}[!htbp]
-  \caption{Decisão D2 --- condições de acesso precário}\label{qua:d2}
+  \caption{Decisão D2, condições de acesso precário}\label{qua:d2}
   \centering\small
-  \antesdepois{captura_e1.png}{E1, Figura \preencher{n}}{tela_nn.png}{Tela \preencher{nn}}
-  \qoc{\preencher{questão}}%
-      {\preencher{}}%
-      {\preencher{}}%
-      {\preencher{ID da matriz}}%
-      {\preencher{achado A\# ou sessão S\#; persona 6}}%
-      {\preencher{uma frase}}
+  \antesdepois{fig_cat.png}{E1, Figura 2 (catálogo em três colunas e múltiplos carregamentos)}{tela_01d_mobile.png}{Tela 01d (coluna única e rota alternativa)}
+  \qoc{Como viabilizar que uma pessoa em celular de entrada, com tela pequena e internet móvel limitada ou instável, chegue ao formulário sem gastar franquia à toa nem travar em falhas pontuais?}%
+      {Layout em coluna única projetado para refluxo até 320~px sem rolagem horizontal, remoção de banners pesados, alvos clicáveis de 40~px de altura (\texttt{altura/alvo}), menos carregamentos em domínio único e tela ``Fora do ar'' (01d) que preserva ``Mais procurados'' clicável mesmo quando a busca cai.}%
+      {Manter os três subdomínios, os quatro carregamentos intermediários, o banner institucional da NFS-e e o catálogo em três colunas apenas ajustados por redimensionamento simples.}%
+      {RU03, RA04, RA07}%
+      {Achados A2, A5 e A12; sessão S4; personas 2 (Júlia) e 6 (Edilene, acesso precário).}%
+      {Cortar recargas de página e elementos pesados economiza dados móveis e tempo de carregamento; alvos de 40~px reduzem erros de toque em telas pequenas, na linha da Lei de Fitts \cite{fitts1954} e acima do piso de 24~px da WCAG 2.2 \cite{wcag22}; e manter os atalhos na Tela 01d impede que uma instabilidade na busca bloqueie a jornada como um todo.}
   \fonte{\autores}
 \end{quadro}\FloatBarrier
 
 % D3 -------------------------------------------------------------------
 \begin{quadro}[!htbp]
-  \caption{Decisão D3 --- \preencher{tema}}\label{qua:d3}
+  \caption{Decisão D3, vocabulário mais acessível}\label{qua:d3}
   \centering\small
-  \antesdepois{captura_e1.png}{E1, Figura \preencher{n}}{tela_nn.png}{Tela \preencher{nn}}
-  \qoc{\preencher{questão}}{\preencher{}}{\preencher{}}{\preencher{ID da matriz}}{\preencher{achado ou sessão}}{\preencher{uma frase}}
+  \antesdepois{a3_catalogo.png}{E1, Figura 9 (catálogo mais jurídico)}{tela_03_mobile.png}{Tela 03 (Linguagem simples)}
+  \qoc{Como nomear os serviços ligados a imóveis para que o cidadão reconheça a emissão da guia sem dominar jargão jurídico nem confundir telas diferentes chamadas apenas ``ITBI''?}%
+      {Nomear cada opção pela ação concreta em linguagem simples (``Emitir guia do ITBI'', ``Contestar o valor do ITBI'', ``Pedir isenção do ITBI''), explicar a sigla no próprio subtítulo (``Imposto sobre a compra de imóvel'') usando texto real em vez de cartões em imagem e manter o termo técnico apenas como apoio (``Também chamado de lançamento de ITBI'').}%
+      {Manter os rótulos jurídicos atuais (``Transmissão Onerosa -- Lançamento de ITBI'', ``Efetuar Impugnação'') e tentar compensar com um glossário ou ícone de ajuda à parte.}%
+      {RU01, RU02, RU05, RU06, RA08, RA10}%
+      {Achados A3, A6 e A10; sessões S2, S4 e S5; personas 1, 2, 4, 5 e 7.}%
+      {Substituir termos internos pelo verbo da tarefa auxilia no reconhecimento ao invés da recordação \cite{norman2013}, segue a Lei de Linguagem Simples \cite{linguagemsimples2025} e comabte a causa comum de seis achados da E1, além de eliminar os cartões em imagem sem texto alternativo que bloqueavam o leitor de tela.}
   \fonte{\autores}
 \end{quadro}\FloatBarrier
 
 % D4 -------------------------------------------------------------------
 \begin{quadro}[!htbp]
-  \caption{Decisão D4 --- \preencher{tema}}\label{qua:d4}
+  \caption{Decisão D4, unificação visual sob o DSGov e correção de contraste}\label{qua:d4}
   \centering\small
-  \antesdepois{captura_e1.png}{E1, Figura \preencher{n}}{tela_nn.png}{Tela \preencher{nn}}
-  \qoc{\preencher{questão}}{\preencher{}}{\preencher{}}{\preencher{ID da matriz}}{\preencher{achado ou sessão}}{\preencher{uma frase}}
+  \antesdepois{c_cabecalhos.png}{E1, Figura 8 (barra de acessibilidade ausente)}{tela_01_desktop.png}{Telas 01 a 06 (contraste nível AA)}
+  \qoc{Como tirar a sensação de mudança de site no meio do caminho e tornar textos, bordas, estados ativos e foco legíveis para quem tem baixa visão ou tela com pouco brilho?}%
+      {Adotar cabeçalho único e tokens de cor, tipografia e foco do DSGov em todas as telas do fluxo, mantendo os controles de login e acessibilidade na mesma posição e garantindo contraste mínimo nível AA (pelo menos 4,5:1 em textos e 3:1 em bordas e foco).}%
+      {Preservar as três identidades visuais separadas (portal institucional, Receita e Atendimento Virtual), trocando apenas a cor dos botões que reprovaram na medição de contraste.}%
+      {RU07, RU08, RA02, RA03, RA06, RA08}%
+      {Achados A2, A4 e A10; sessões S1, S2 e S3; personas 1, 3 e 5.}%
+      {Unificar o cabeçalho e o sistema visual sob o DSGov \cite{dsgov} auxilia quanto ao o senso de localização do usuário desde o início até o fim da sua navegabilidade, impede que a acessibilidade não exista na etapa do formulário e corrige os contrastes críticos de 1,35:1 a 2,61:1 encontrados na E1.}
   \fonte{\autores}
 \end{quadro}\FloatBarrier
 
 % D5 -------------------------------------------------------------------
 \begin{quadro}[!htbp]
-  \caption{Decisão D5 --- \preencher{tema}}\label{qua:d5}
+  \caption{Decisão D5, pré-requisitos e simplificação do formulário}\label{qua:d5}
   \centering\small
-  \antesdepois{captura_e1.png}{E1, Figura \preencher{n}}{tela_nn.png}{Tela \preencher{nn}}
-  \qoc{\preencher{questão}}{\preencher{}}{\preencher{}}{\preencher{ID da matriz}}{\preencher{achado ou sessão}}{\preencher{uma frase}}
+  \antesdepois{a9_form.png}{E1, Figura 15 (seletores vazios)}{tela_06_mobile.png}{Telas 04, 05 e 06 (formulário pré-selecionado)}
+  \qoc{Como avisar login e documentos antes do preenchimento e reduzir tanto a carga cognitiva quanto as barreiras de teclado ao abrir o formulário de solicitação?}%
+      {Inserir a entrada única via gov.br (Tela 04) e a tela ``Antes de começar'' com a lista de documentos (Tela 05), abrindo a Tela 06 com \textit{Assunto}, \textit{Tipo de atendimento} e dados cadastrais já preenchidos, sinalizando apenas campos ``(opcional)'' em texto claro e simplificando a descrição com saída por Tab e validação explícita (Tela 06b).}%
+      {Enviar a pessoa direto ao formulário legado com seletores dependentes em ``Selecione'', asterisco vermelho claro sem associação programática e editor de texto completo, mantendo o ``Passo a Passo'' escondido entre seis botões iguais no topo.}%
+      {RU04, RU05, RU07, RU08, RA01, RA09, RA10, RA11}%
+      {Achados A8, A9 e A11; sessões S1 e S4; inspeção com NVDA e teclado; personas 1, 3, 4, 5 e 6.}%
+      {Informar os pré-requisitos antes da digitação pode evitar a desistência tardia e idas desnecessárias ao atendimento presencial; e reduzir a descrição remove os botões sem rótulo e a armadilha de teclado identificada na E1.}
   \fonte{\autores}
 \end{quadro}\FloatBarrier
-
-% Capturas "antes" disponíveis em entrega1/relatorio/figuras (número na E1):
-%   fig_home.png (Fig. 1)  fig_cat.png (2)  fig_serv.png (3)  fig_atv.png (4)
-%   fig_form.png (5)       a1_menu.png (7)  c_cabecalhos.png (8)
-%   a3_catalogo.png (9)    a4_contraste.png (10)  a5_faixa.png (11)
-%   c_itbi.png (12)        a7_busca.png (13)  a8_login.png (14)
-%   a9_form.png (15)       c_governo.png (16)
 
 % =====================================================================
 \chapter{Matriz de rastreabilidade}\label{cap:matriz}
 % =====================================================================
 
-A matriz foi entregue em arquivo separado,
-\texttt{UCEngUs\_\allowbreak matriz\_\allowbreak GrupoB.xlsx}, no Moodle, com
-as colunas ``Decisão de design'' e ``Situação na E2'' preenchidas para os vinte
-requisitos (RU01 a RU08 e RA01 a RA12).
+A matriz de rastreabilidade atualizada para a entrega 2 foi entregue, no Moodle (\texttt{UCEngUs\_\allowbreak matriz\_\allowbreak GrupoB.xlsx}).
 
 % =====================================================================
 \chapter{Declaração de contribuição individual}\label{cap:contribuicao}
@@ -563,34 +612,28 @@ requisitos (RU01 a RU08 e RA01 a RA12).
 \begin{quadro}[!htbp]
   \caption{Contribuição individual}\label{qua:contribuicao}
   \centering\small
-  \begin{tabularx}{\textwidth}{|P{3.4cm}|Y|}\hline
+  \begin{tabularx}{\textwidth}{|P{4.2cm}|Y|}\hline
     Integrante & Atividades realizadas \\\hline
-    Ícaro Marra Souza & \preencher{} \\\hline
-    Karoline Rodrigues Costa & \preencher{} \\\hline
-    Leonardo Brito Gomes & \preencher{} \\\hline
-    Luiz Gustavo Silva Carvalho & \preencher{} \\\hline
+    Ícaro Souza & Elaboração da matriz de rastreabilidade e apoio na revisão geral. \\\hline
+    Karoline Costa & Escrita do memorial e construção do protótipo no Figma. \\\hline
+    Leonardo Brito & Escrita do memorial e construção do protótipo no Figma. \\\hline
+    Luiz Gustavo & Escrita do memorial e construção do protótipo no Figma. \\\hline
   \end{tabularx}
   \fonte{\autores}
-\end{quadro}
+\end{quadro}\FloatBarrier
 
 % =====================================================================
 \chapter{Declaração de uso de inteligência artificial}\label{cap:ia}
 % =====================================================================
 
-Conforme a seção 1.2 do enunciado, esboços, fluxo de navegação, wireframe,
-protótipo, código e textos de interface foram produzidos pelos integrantes, sem
-uso de inteligência artificial generativa.
-
 \begin{quadro}[!htbp]
   \caption{Uso de inteligência artificial}\label{qua:ia}
   \centering\small
-  \begin{tabularx}{\textwidth}{|P{3.4cm}|Y|P{2.4cm}|}\hline
+  \begin{tabularx}{\textwidth}{|P{3.6cm}|Y|P{2.8cm}|}\hline
     Ferramenta & Forma de uso & Etapa \\\hline
-    Claude (Anthropic) & Geração do modelo \LaTeX{} vazio deste memorial (estrutura de capítulos e quadros), com revisão dos autores. & Diagramação \\\hline
-    \preencher{} & \preencher{} & \preencher{} \\\hline
+    Claude (Anthropic) & Apoio na geração inicial da estrutura \LaTeX{} (capítulos e quadros) deste memorial, revisada pelos autores. & Diagramação \\\hline
   \end{tabularx}
-  \fonte{\autores}
-\end{quadro}
+\end{quadro}\FloatBarrier
 
 \postextual
 
@@ -599,15 +642,12 @@ uso de inteligência artificial generativa.
 \begin{anexosenv}
 \partanexos
 
-\chapter{Esboços dos integrantes}\label{an:esbocos}
+\chapter{Esboços}\label{an:esbocos}
 
-Fotos das folhas feitas em 27/10, em sala. \preencher{Se alguém faltou, indicar
-quem fez os esboços fora de sala e quando apresentou ao grupo.}
-
-\fig[0.7]{esboco-icaro}{esboco_icaro.jpg}{Esboços de Ícaro Marra Souza}{\autores}
-\fig[0.7]{esboco-karoline}{esboco_karoline.jpg}{Esboços de Karoline Rodrigues Costa}{\autores}
-\fig[0.7]{esboco-leonardo}{esboco_leonardo.jpg}{Esboços de Leonardo Brito Gomes}{\autores}
-\fig[0.7]{esboco-luiz}{esboco_luiz.jpg}{Esboços de Luiz Gustavo Silva Carvalho}{\autores}
+\fig[0.7]{esboco-icaro}{esboco_icaro.jpg}{Esboço do Ícaro Souza}{\autores}
+\fig[0.7]{esboco-karoline}{esboco_karoline.jpg}{Esboço da Karoline Costa}{\autores}
+\fig[0.7]{esboco-leonardo}{esboco_leonardo.jpg}{Esboço do Leonardo Brito}{\autores}
+\fig[0.7]{esboco-luiz}{esboco_luiz.jpg}{Esboço do Luiz Gustavo}{\autores}
 
 \end{anexosenv}
 
